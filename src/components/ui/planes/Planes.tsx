@@ -100,7 +100,7 @@ export function Planes() {
         gris
       />
       <div className="mx-[10px] flex flex-grow justify-center">
-        <div className="w-full px-10">
+        <div className="w-full ">
         <Slider {...settings}>
           <CardPlanes
             url="/planes/just-class"
