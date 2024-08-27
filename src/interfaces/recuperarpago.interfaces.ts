@@ -23,6 +23,7 @@ export interface Record {
 export interface Billing {
     street1: string;
     street2: string;
+    friendId: string;
     city: string;
     state: string;
     postcode: string;

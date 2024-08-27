@@ -23,10 +23,10 @@ export default function Home({ params }: Props) {
   const { plan } = params;
 
 
-  if (!Object.values(Page).includes(plan as Page)) {
-    redirect("/");
+  // if (!Object.values(Page).includes(plan as Page)) {
+  //   redirect("/");
 
-  }
+  // }
   const planSeleccionado = getPlan(plan);
 
   const [error, setError] = useState<string | undefined>();

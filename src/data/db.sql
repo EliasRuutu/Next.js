@@ -182,9 +182,15 @@ INSERT INTO pais (nombre) VALUES ('US');
 INSERT INTO planes (nombre) VALUES ('JUST CLASS');
 INSERT INTO planes (nombre) VALUES ('FULL FIT');
 INSERT INTO planes (nombre) VALUES ('ESTUDIANTE');
+INSERT INTO planes (nombre) VALUES ('TRIMESTRAL');
+INSERT INTO planes (nombre) VALUES ('SEMESTRAL');
+INSERT INTO planes (nombre) VALUES ('ANUAL');
 
 INSERT INTO planes (nombre) VALUES ('ANUALIDAD - JUST CLASS');
 INSERT INTO planes (nombre) VALUES ('ANUALIDAD - FULL FIT');
 INSERT INTO planes (nombre) VALUES ('ANUALIDAD - ESTUDIANTE');
+INSERT INTO planes (nombre) VALUES ('ANUALIDAD - TRIMESTRAL');
+INSERT INTO planes (nombre) VALUES ('ANUALIDAD - SEMESTRAL');
+INSERT INTO planes (nombre) VALUES ('ANUALIDAD - ANUAL');
 
 

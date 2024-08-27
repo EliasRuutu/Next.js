@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Resumen from "../Resumen";
 import { KommonExtraBold, KommonExtraLight } from "@/config/fonts";

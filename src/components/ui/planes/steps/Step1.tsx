@@ -1,4 +1,4 @@
-
+"use client"
 import React from 'react'
 import Planes from '../Plan'
 import Image from 'next/image';
@@ -56,6 +56,45 @@ const Step1 = ( { planSelect, plans, setMensualidad, setDescuento, setTotal,setD
               setPlanId={setPlanId}
                 plan1={plans[2]}
                 plan2={plans[3]}
+                setMensualidad={setMensualidad}
+                setDescuento={setDescuento}
+                setTotal={setTotal}
+                setDomiciliacionDesc={setDomiciliacionDesc}
+              />
+            </>
+          )}
+          {planSelect.select == 4 && (
+            <>
+              <Planes
+              setPlanId={setPlanId}
+                plan1={plans[2]}
+                plan2={plans[4]}
+                setMensualidad={setMensualidad}
+                setDescuento={setDescuento}
+                setTotal={setTotal}
+                setDomiciliacionDesc={setDomiciliacionDesc}
+              />
+            </>
+          )}
+          {planSelect.select == 5 && (
+            <>
+              <Planes
+              setPlanId={setPlanId}
+                plan1={plans[2]}
+                plan2={plans[5]}
+                setMensualidad={setMensualidad}
+                setDescuento={setDescuento}
+                setTotal={setTotal}
+                setDomiciliacionDesc={setDomiciliacionDesc}
+              />
+            </>
+          )}
+          {planSelect.select == 6 && (
+            <>
+              <Planes
+              setPlanId={setPlanId}
+                plan1={plans[2]}
+                plan2={plans[6]}
                 setMensualidad={setMensualidad}
                 setDescuento={setDescuento}
                 setTotal={setTotal}
