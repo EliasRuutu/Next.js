@@ -1,4 +1,3 @@
-"use client";
 import {
   KommonExtraLight,
   KommonSemiBold,

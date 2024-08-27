@@ -1,4 +1,3 @@
-"use client";
 import { KommonSemiBold, KommonSemiBoldIt } from "@/config/fonts";
 import { useEffect, useState } from "react";
 
