@@ -119,7 +119,7 @@ export function Horarios() {
         id="horarios"
         // onClick={() => {const sidenav : any = document.getElementById("sidenav"); sidenav.style.width = "0px";}}
       >
-        <div className=""></div>
+        <div className="img3"></div>
         <TituloSecciones
           tituloGris="HORARIOS"
           tituloMagenta="DE CLASES"
