@@ -60,8 +60,9 @@ const PaymentStatus = () => {
                         '<div id="customer.email" class="customInput">Email: <input type="text" class="wpwl-control" name="customer.email" value=""></div>' +
                         '<div id="customer.phone" class="customInput">Teléfono ej.(52-6641501234): <input type="text" class="wpwl-control" id="telefono" name="customer.phone" maxlength="15" value="52-"></div>' +
                         '<div id="billing.street1" class="customInput">Dirección: <input type="text" class="wpwl-control" name="billing.street1" value="" maxlength="48"></div>' +
-                        '<div id="billing.street1" class="customInput">Código Postal: <input type="text" class="wpwl-control" name="billing.postcode" value="" maxlength="9"></div>' +
-                        '<div id="billing.city" class="customInput mb-4">Cuidad: <input type="text" class="wpwl-control" name="billing.city" value="" maxlength="40"></div>';
+                        '<div id="billing.postcode" class="customInput">Código Postal: <input type="text" class="wpwl-control" name="billing.postcode" value="" maxlength="9"></div>' +
+                        '<div id="billing.city" class="customInput">Cuidad: <input type="text" class="wpwl-control" name="billing.city" value="" maxlength="40"></div>'+
+                        '<div id="billing.friendId" class="customInput mb-4">ID de socio: <input type="text" class="wpwl-control" name="billing.friendId" value="" maxlength="20"></div>' ;
 
                     // Encontrar el formulario de manera segura
                     const form = document.querySelector('form.wpwl-form-card');

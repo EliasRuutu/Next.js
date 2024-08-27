@@ -22,6 +22,7 @@ export interface Pago {
 
 export interface Billing {
     street1: string;
+    friendId: string;
     postcode: string;
 }
 
