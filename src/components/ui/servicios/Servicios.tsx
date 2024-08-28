@@ -35,7 +35,7 @@ function SamplePrevArrow(props: any) {
   );
 }
 
-export const Servicios = () => { 
+export const Servicios = () => {
 
   const [viewportWidth, setViewportWidth] = useState<number>(600);
   const [viewportHeight, setViewportHeight] = useState<number>(600);

@@ -1,4 +1,3 @@
-"use client"
 import { currentRole, currentUser } from "@/lib/useAuth"
 import SidebarContent from "./SidebarContent"
 
