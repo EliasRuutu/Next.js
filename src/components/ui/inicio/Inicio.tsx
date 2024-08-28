@@ -34,17 +34,7 @@ export function Inicio() {
               {" "}
               Planes{" "}
             </Button>
-            <Button
-              to="horarios"
-              spy={true}
-              smooth={true}
-              offset={-70}
-              duration={500}
-              className={` bg-[#fbed21] | text-center | hover:text-center | text-black | px-[5vw] | py-[1.2vw] | rounded-sm | md:rounded-xl | text-[5vw] | lg:text-[2vw] font-semibold hover:text-white hover:bg-[#c60385] hover:shadow-lg `}
-            >
-              {" "}
-              Reservar{" "}
-            </Button>
+            
           </div>
         </div>
       </div>

@@ -128,3 +128,11 @@
   mask: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.75) 40%, rgba(0, 0, 0, 0) 80%);
 }
 
+.outlined-text {
+  color: black; /* Main text color */
+  text-shadow: 
+    -1px -1px 0 white,  
+    1px -1px 0 white,
+    -1px 1px 0 white,
+    1px 1px 0 white; /* Create the outline effect */ /* Adjust size as needed */
+}

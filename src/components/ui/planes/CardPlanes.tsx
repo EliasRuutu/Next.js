@@ -68,9 +68,9 @@ export function CardPlanes({
             {price}
           </p>
           <p
-            className={` ${KommonExtraLight.className} text-center flex flex-col italic font-bold`}
+            className={` ${KommonExtraLight.className} text-center italic font-bold`}
           >
-            {titulo2} <div>+INSCRIPCOIN</div>
+            {titulo2} <br/>+INSCRIPCOIN
           </p>
         </div>
         <div

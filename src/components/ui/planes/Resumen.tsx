@@ -1,3 +1,4 @@
+"use client";
 import { KommonExtraBold, KommonExtraLight } from "@/config/fonts";
 import { remplacePuntoPrice } from "@/lib/remplacePuntoPrice";
 
