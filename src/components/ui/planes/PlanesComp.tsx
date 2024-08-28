@@ -15,24 +15,23 @@ const PlanesComp = () => {
   function SampleNextArrow(props: any) {
     const { className, style, onClick } = props;
     return (
-      <div
+      <div>
+      {/* <div
         className={className + " translate-x-10"}
         style={{ ...style }}
-        onClick={onClick}
-      />
+        
+      /> */}
+      <div onClick={onClick} className="w-11 h-11 rounded-full bg-[#f5eb24] text-[32px] leading-8 font-bold flex justify-center items-center absolute -right-5 top-[50%] cursor-pointer">&gt;</div>
+      </div>
     );
   }
   
   function SamplePrevArrow(props: any) {
     const { className, style, onClick } = props;
     return (
-      <div
-        className={className}
-        style={{
-          ...style,
-        }}
-        onClick={onClick}
-      />
+      <div>
+        <div onClick={onClick} className="w-11 h-11 rounded-full bg-[#f5eb24] text-[32px] leading-8 font-bold flex justify-center items-center absolute -left-5 top-[50%] z-10 cursor-pointer">&lt;</div>
+        </div>
     );
   }
 
@@ -77,9 +76,9 @@ const PlanesComp = () => {
     prevArrow: <SamplePrevArrow />,
     afterChange: (current: any) => setCurrentSlide(current),
   };
-  if (viewportWidth < 430) {
+  if (viewportWidth < 480) {
     settings.slidesToShow = 1;
-    settings.centerPadding = "25px";
+    settings.centerPadding = "0px";
   } else if (viewportWidth < 500) {
     settings.slidesToShow = 1;
     settings.centerPadding = "60px";
@@ -89,13 +88,10 @@ const PlanesComp = () => {
   } else if (viewportWidth < 768) {
     settings.slidesToShow = 1;
     settings.centerPadding = "60px";
-  } else if (viewportWidth < 1024) {
+  } else if (viewportWidth < 1096) {
     settings.slidesToShow = 2;
     settings.centerPadding = "60px";
-  } else if (viewportWidth < 1024) {
-    settings.slidesToShow = 2;
-    settings.centerPadding = "60px";
-  } else if (viewportWidth < 1280) {
+  } else if (viewportWidth < 1320) {
     settings.slidesToShow = 3;
     settings.centerPadding = "60px";
   } else if (viewportWidth < 1536) {
@@ -113,7 +109,7 @@ const PlanesComp = () => {
         gris
       />
       <div className="mx-[10px] flex flex-grow justify-center">
-        <div className="w-full flex flex-col gap-4 justify-center mb-8 px-10">
+        <div className="w-full flex flex-col gap-4 justify-center mb-8 px-5 sm:px-10">
           <div className="flex flex-col justify-center">
             <div className="font-bold text-center">
               COSTO DE INSCRIPCION: $ 200.°°

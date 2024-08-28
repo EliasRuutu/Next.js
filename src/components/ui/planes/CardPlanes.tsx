@@ -50,12 +50,11 @@ export function CardPlanes({
   }, []);
 
   return (
-    <div className="h-[380px] flex justify-center items-end">
+    <div className="h-[380px] flex justify-center items-end mb-10">
       <div
         className={`relative flex flex-row justify-center items-center  ${
           color ? "text-white" : ""
         }`}
-        data-aos="fade-up"
       >
         <div
           className={`absolute top-[-90px] flex justify-center flex-col items-center ${colorCard}  rounded-full h-[180px] w-[180px] border-2 border-white shadow-md shadow-black/35`}

@@ -13,6 +13,8 @@ import './styles-bgimage.css';
 import Aos from "aos";
 import { set } from "zod";
 
+import { useRouter } from "next/navigation";
+
 
 const botones = [
   "LUNES",
@@ -27,6 +29,9 @@ const botones = [
 const horarios = dataHorarios;
 
 export function Horarios() {
+  
+  const router = useRouter();
+
   const [button, setButton] = useState(0);
   const [animateIndex, setAnimateIndex] = useState< number | null>(null);
   //bauncer
@@ -86,14 +91,19 @@ export function Horarios() {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
                 {horarios[button].map((horario, index) => (
                   <div
-                    key={index}
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                    className={` flex flex-col w-[10rem] h-[10rem] justify-center items-center border-2 border-white rounded-lg hover:cursor-pointer hover:bg-[#c60384] hover:border-2 hover:border-[#c60384] [&>p]:hover:text-white transition-all duration-700 dela ${ animateIndex !== null  ? 'opacity-0' : 'opacity-100'}
-                      ${ animateIndex !== null  ? 'animate-fade-up' : ' '} `}
-                  >
-                    <p className={`text-[#fbed21] text-xl ${KommonSemiBoldIt.className}`}>{horario.titulo}</p>
-                    <p className={`text-white font-light ${KommonExtraLight.className}`}>{horario.horarios}</p>
-                  </div>
+                  key={index}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => {horario.titulo === 'SPINNING'?router.push(`${process.env.NEXT_PUBLIC_APP_URL}/reservar/spinning`):null}}
+                  className={`relative flex flex-col w-[13rem] h-[13rem] justify-center items-center border-2 border-white rounded-lg hover:cursor-pointer hover:bg-[#c60384] hover:border-2 hover:border-[#c60384] [&>p]:hover:text-white transition-all duration-700 dela group ${animateIndex !== null ? 'opacity-0' : 'opacity-100'}`}
+                >
+                  <p className={`text-[#fbed21] text-xl ${KommonSemiBoldIt.className}`}>{horario.titulo}</p>
+                  <p className={`text-white font-light ${KommonExtraLight.className}`}>{horario.horarios}</p>
+                  
+                  {/* Child div that appears on hover */}
+                  {horario.titulo=== 'SPINNING'&&<div className={`absolute bottom-8 left-[50%] translate-x-[-50%] w-[60%] h-9 flex justify-center items-center bg-white rounded-md transition-opacity duration-500 opacity-0 group-hover:opacity-100`}>
+                    Reservar
+                  </div>}
+                </div>
                 ))}
               </div>
             </div>
