@@ -125,7 +125,7 @@ const PlanesComp = () => {
               COSTO DE Inscripción: $ 200.°°
             </div>
             <div className="text-center italic">
-              {`(El pago de inscripcion deberas hacerlo en recepcion, adicional, tomaremos tus huellas para tu ingreso)`}
+              {`(El pago de inscripción deberas hacerlo en recepcion, adicional, tomaremos tus huellas para tu ingreso)`}
             </div>
           </div>
           <Slider ref={sliderRef} {...settings}>
