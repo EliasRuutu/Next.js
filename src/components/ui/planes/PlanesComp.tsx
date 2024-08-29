@@ -25,7 +25,7 @@ const PlanesComp = () => {
         
       /> */}
       <div className="absolute top-[-50%] -right-5 translate-y-[50%] translate-x-1 w-[16%]  sm:w-[140px] lg:w-[160px] xl:w-[212px] bg-white h-[430px] "></div>
-      <div onClick={onClick} className=" text-[32px] leading-8 font-bold flex justify-center items-center absolute -right-5 top-[50%] cursor-pointer translate-x-[-12px] sm:translate-x-[-36px]">
+      <div onClick={onClick} className=" text-[32px] leading-8 font-bold flex justify-center items-center absolute -right-5 top-[50%] cursor-pointer translate-x-[0px] sm:translate-x-[-36px]">
         <Image width={50} height={50} src={rightArrow} alt="next"/>
       </div>
       </div>
@@ -38,7 +38,7 @@ const PlanesComp = () => {
       <div>
 
         <div className="absolute top-[-50%] -left-5 translate-y-[50%] translate-x-1 w-[16%] sm:w-[140px] lg:w-[160px] xl:w-[212px] bg-white h-[430px] z-10"></div>
-        <div onClick={onClick} className="  text-[32px] leading-8 font-bold flex justify-center items-center absolute -left-5 top-[50%] z-10 cursor-pointer translate-x-[12px] sm:translate-x-[36px]">
+        <div onClick={onClick} className="  text-[32px] leading-8 font-bold flex justify-center items-center absolute -left-5 top-[50%] z-10 cursor-pointer translate-x-[0px] sm:translate-x-[36px]">
           <Image width={50} height={50} src={leftArrow} alt="prev"/>
         </div>
         </div>
