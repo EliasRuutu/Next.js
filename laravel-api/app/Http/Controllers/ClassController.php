@@ -23,8 +23,16 @@ class ClassController extends Controller
         $selectedTime = '7:00 - 8:00 AM';
         $weekth = 0;
         $selectedNum = 0;
-        $seatCount = 0;
         $seats = config('seats.list');
+        $totalprice = 0;
+        $fullSeatsCount = 0;
+        $disableSeatsCount = 0;
+        $emptySeatsCount = 0;
+        foreach($seats as $index => $item){
+            if($item == "Full") {$fullSeatsCount ++; $totalprice += 50;}
+            if($item == "Disable") $disableSeatsCount ++;
+            if($item == "Empty") $emptySeatsCount ++;
+        }
         $seatsDirection = config('seatsDirection.list');
         $step = 1;
         $weekth = 0;
@@ -37,13 +45,17 @@ class ClassController extends Controller
             'selectedTime',
             'weekth',
             'selectedNum',
-            'seatCount',
             'step',
             'seats',
             'seatsDirection',
             'profile',
             'profile2',
-            'homeUrl'
+            'homeUrl',
+            'fullSeatsCount',
+            'disableSeatsCount',
+            'emptySeatsCount',
+            'totalprice'
+
         ))->with([
             'getFutureDateInSpanish' => function($days) { return $this->getFutureDateInSpanish($days); },
             'getFutureDateInEnglish' => function($days) { return $this->getFutureDateInEnglish($days); },

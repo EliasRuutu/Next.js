@@ -276,7 +276,7 @@
 
                 style="font-family: KommonExtraBold;"
                 class="text-[32px] font-bold">
-                $ 0. °°
+                $ {{$totalprice}}. °°
             </div>
         </div>
         <div class="bg-white border-gray-950 border-2 w-full 2xl:w-[90%] max-h-[380px] lg:max-h-[380px] rounded-md px-6 flex flex-col gap-3 overflow-auto ">
@@ -292,7 +292,10 @@
                     Spinning
                 </div>
             </div>
-            <hr class="bg-[#dad9d8] h-[6px] w-full" />
+
+            <div>
+                <hr class="bg-[#dad9d8] h-[3px] w-full">
+            </div>
             <div class="flex flex-col">
                 <div
                     style="font-family: KommonExtraBold;"
@@ -305,24 +308,56 @@
                     <span id="selectedDate">{{$selectedDate}}</span> , <span id="selectedTime">{{$selectedTime}}</span>
                 </div>
             </div>
-            <hr class="bg-[#dad9d8] h-[6px] w-full" />
-            <div class="flex flex-col">
+            <div>
+                <hr class="bg-[#dad9d8] h-[3px] w-full" />
+            </div>
+            <div class="flex flex-col gap-2">
                 <div
                     style="font-family: KommonExtraBold;"
                     class="text-[24px] font-bold">
-                    BICICLETA ({{$seatCount}})
+                    BICICLETA ({{$fullSeatsCount}})
                 </div>
-                <div class="w-full">
+                <div id="seat-detail" class="w-full flex flex-col gap-3">
+                    @if($fullSeatsCount === 0)
+                    <div
+                        id="seatisEmpty"
+                        style="font-family: KommonSemiBold;"
+                        class="text-[20px] flex gap-1 items-center">
+                        <img width={20} height={20} src="{{asset('imgs/icons/38.png')}}" alt="seat" class="w-6 h-6">
+                        No haz seleccionado tus lugares
+                    </div>
+                    @else
                     @foreach($seats as $index => $item)
-                        @if($item === 'Empty')
-                        <div
-                            style="font-family: KommonSemiBold;"
-                            class="text-[20px] flex gap-1 items-center">
-                            <img width={20} height={20} src="{{asset('imgs/icons/38.png')}}" alt="seat" class="w-6 h-6">
-                            No haz seleccionado tus lugares
-                        </div>
+                    @if($item === 'Full')
+                    <div id="seatBlock{{$index}}" class="w-full flex flex-col gap-3">
+                        @if($index > 0)
+                        <hr id="seathr{{$index}}" class="bg-[#dad9d8] h-[3px] w-full" />
                         @endif
+                        <div class="flex justify-between">
+                            <div
+                                style="font-family: KommonSemiBold;"
+                                class="text-[20px] flex gap-1 items-center">
+                                <img width={20} height={20} src="{{asset('imgs/icons/38.png')}}" alt="seat" class="w-6 h-6">
+                                Adulto
+                            </div>
+                            <div
+                                style="font-family: KommonSemiBold;"
+                                class="text-[20px]">
+                                $ 50.°°
+                            </div>
+                        </div>
+                        <div
+                            id="delete-{{$index}}"
+                            style="font-family: KommonExtraBold;"
+                            class="trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer">
+                            <img width={20} height={20} src="{{asset('imgs/icons/45.png')}}" alt="seat" class="w-5 h-5">
+                            Eliminar
+                        </div>
+                    </div>
+
+                    @endif
                     @endforeach
+                    @endif
                 </div>
                 <button
                     id="step-12"
@@ -360,7 +395,7 @@
 
                         style="font-family: KommonExtraBold;"
                         class="text-[32px] font-bold">
-                        $ 100. °°
+                        $ {{$totalprice}}. °°
                     </div>
                 </div>
             </div>
@@ -368,7 +403,6 @@
     </div>
     </div>
     <script lanugage="javascript">
-
         const gotoHome = () => {
             window.parent.location.href = "<?= $homeUrl ?>";
         }
@@ -424,11 +458,12 @@
 
         var weekth = <?= $weekth ?>;
         var step = <?= $step ?>;
+        var fullSeatsCount = <?= $fullSeatsCount ?>
 
 
         $(document).ready(function() {
             const gotoHome = () => {
-                window.parent.location.href= "http://localhost:3000";
+                window.parent.location.href = "http://localhost:3000";
                 // window.parent.location.href= env('Parent_URL', 'default_value');
             }
             $(".am").on('click', function(e) {
@@ -496,13 +531,19 @@
                         $(e.target).parent(".seats").html(
                             " <img width='50' height='50' src='{{asset('imgs/icons/38.png')}}' alt='logo' class='seat-Full cursor-pointer'>"
                         )
+                    if (fullSeatsCount == 0) {
+                            $("#seatisEmpty").remove();
+                        $("#seat-detail").append(
+                            "<div id='seatBlock" + seatid + "' class='w-full flex flex-col gap-3'> <div class='flex justify-between'> <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'>   Adulto </div> <div style = 'font-family: KommonSemiBold;'class = 'text-[20px]' > $ 50.°° </div> </div> <div id = 'delete-"+seatid+"' style = 'font-family: KommonExtraBold;' class = 'trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer' > <img width = {20} height = {20} src = '{{asset('imgs/icons/45.png ')}}' alt = 'seat' class = 'w-5 h-5' > Eliminar </div> </div>"
+                        )
+                    }
+                    else {
+                        $("#seat-detail").append(
+                            "<div id='seatBlock" + seatid + "' class='w-full flex flex-col gap-3'> <hr id='seathr"+seatid+"' class='bg-[#dad9d8] h-[3px] w-full' /> <div class='flex justify-between'> <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'>   Adulto </div> <div style = 'font-family: KommonSemiBold;'class = 'text-[20px]' > $ 50.°° </div> </div> <div id = 'delete-"+seatid+"' style = 'font-family: KommonExtraBold;' class = 'trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer' > <img width = {20} height = {20} src = '{{asset('imgs/icons/45.png ')}}' alt = 'seat' class = 'w-5 h-5' > Eliminar </div> </div>"
+                        )
+                    }
+                    fullSeatsCount++;
                     
-                    
-
-
-
-
-
                 } else if (seatState == "Full") {
                     if (seatDirection == "transform")
                         $(e.target).parent(".seats").html(
@@ -512,6 +553,14 @@
                         $(e.target).parent(".seats").html(
                             " <img width='50' height='50' src='{{asset('imgs/icons/40.png')}}' alt='logo' class='seat-Empty cursor-pointer'>"
                         )
+                    $("#seatBlock" + seatid).remove()
+                    fullSeatsCount--;
+                    if (fullSeatsCount == 0) {
+                        $("#seat-detail").html(
+                            "<div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>"
+                        )
+                    }
+
                 }
 
 
