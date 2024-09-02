@@ -20,6 +20,10 @@ Proyecto Next.js 14 con Autenticación
 4. Correr las migraciones ```npx prisma migrate dev```
 6. Ejecutar ```npm run dev```
 7. npx prisma generate
+8. Crea otra Terminal y Ejecutar ```cd laravel-api```
+9. Ejecutar ```npm run dev```
+10. Crea otra Terminal y Ejecutar ```php artisan serve```
+
 
 ## Presentación
 

@@ -5,7 +5,10 @@ import { TituloSecciones } from "../TituloSecciones";
 import { CardPlanes } from "./CardPlanes";
 
 import Slider from "react-slick";
+import Image from "next/image";
 
+import rightArrow from "@/../../public/imgs/carusel/right.png"
+import leftArrow from "@/../../public/imgs/carusel/left.png"
 
 const PlanesComp = () => {
   const sliderRef = useRef<Slider | null>(null); // Create a ref for the slider
@@ -21,7 +24,10 @@ const PlanesComp = () => {
         style={{ ...style }}
         
       /> */}
-      <div onClick={onClick} className="w-11 h-11 rounded-full bg-[#f5eb24] text-[32px] leading-8 font-bold flex justify-center items-center absolute -right-5 top-[50%] cursor-pointer">&gt;</div>
+      <div className="absolute top-[-50%] -right-5 translate-y-[50%] translate-x-1 w-[16%]  sm:w-[140px] lg:w-[160px] xl:w-[212px] bg-white h-[430px] "></div>
+      <div onClick={onClick} className=" text-[32px] leading-8 font-bold flex justify-center items-center absolute -right-5 top-[50%] cursor-pointer translate-x-[0px] sm:translate-x-[-36px]">
+        <Image width={50} height={50} src={rightArrow} alt="next"/>
+      </div>
       </div>
     );
   }
@@ -30,7 +36,11 @@ const PlanesComp = () => {
     const { className, style, onClick } = props;
     return (
       <div>
-        <div onClick={onClick} className="w-11 h-11 rounded-full bg-[#f5eb24] text-[32px] leading-8 font-bold flex justify-center items-center absolute -left-5 top-[50%] z-10 cursor-pointer">&lt;</div>
+
+        <div className="absolute top-[-50%] -left-5 translate-y-[50%] translate-x-1 w-[16%] sm:w-[140px] lg:w-[160px] xl:w-[212px] bg-white h-[430px] z-10"></div>
+        <div onClick={onClick} className="  text-[32px] leading-8 font-bold flex justify-center items-center absolute -left-5 top-[50%] z-10 cursor-pointer translate-x-[0px] sm:translate-x-[36px]">
+          <Image width={50} height={50} src={leftArrow} alt="prev"/>
+        </div>
         </div>
     );
   }
@@ -66,7 +76,7 @@ const PlanesComp = () => {
     infinite: true,
     centerPadding: "200px",
     slidesToShow: 3,
-    swipeToSlide: true,
+    swipeToSlide: false,
 
     focusOnSelect: true,
     autoplay: true,
@@ -85,19 +95,19 @@ const PlanesComp = () => {
   } else if (viewportWidth < 640) {
     settings.slidesToShow = 1;
     settings.centerPadding = "60px";
-  } else if (viewportWidth < 768) {
+  } else if (viewportWidth < 880) {
     settings.slidesToShow = 1;
     settings.centerPadding = "60px";
-  } else if (viewportWidth < 1096) {
+  } else if (viewportWidth < 1024) {
     settings.slidesToShow = 2;
-    settings.centerPadding = "60px";
-  } else if (viewportWidth < 1320) {
-    settings.slidesToShow = 3;
-    settings.centerPadding = "60px";
-  } else if (viewportWidth < 1536) {
-    settings.slidesToShow = 3;
-    settings.centerPadding = "60px";
-  }
+    settings.centerPadding = "120px";
+  } else if (viewportWidth < 1280) {
+    settings.slidesToShow = 2;
+    settings.centerPadding = "120px";
+  } else if (viewportWidth < 1430) {
+    settings.slidesToShow = 2;
+    settings.centerPadding = "120px";
+  } 
   return (
     <section className="bg-white pt-10" id="planes">
       <TituloSecciones
@@ -111,11 +121,11 @@ const PlanesComp = () => {
       <div className="mx-[10px] flex flex-grow justify-center">
         <div className="w-full flex flex-col gap-4 justify-center mb-8 px-5 sm:px-10">
           <div className="flex flex-col justify-center">
-            <div className="font-bold text-center">
-              COSTO DE INSCRIPCION: $ 200.°°
+            <div className="font-bold text-center uppercase">
+              COSTO DE Inscripción: $ 200.°°
             </div>
             <div className="text-center italic">
-              {`(El pago de inscripcion deberas hacerlo en recepcion, adicional, tomaremos tus huellas para tu ingreso)`}
+              {`(El pago de inscripción deberas hacerlo en recepcion, adicional, tomaremos tus huellas para tu ingreso)`}
             </div>
           </div>
           <Slider ref={sliderRef} {...settings}>
