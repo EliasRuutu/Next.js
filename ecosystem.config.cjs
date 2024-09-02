@@ -15,3 +15,14 @@ module.exports = {
   ]
 
 }
+
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/reservar/:id',
+        destination: 'http://localhost:8000/reservar/:id',
+      },
+    ];
+  },
+};
