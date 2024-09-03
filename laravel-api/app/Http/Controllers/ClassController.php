@@ -24,12 +24,13 @@ class ClassController extends Controller
         $weekth = 0;
         $selectedNum = 0;
         $seats = config('seats.list');
+        $firstseats = $seats[0];
         $totalprice = 0;
         $fullSeatsCount = 0;
         $disableSeatsCount = 0;
         $emptySeatsCount = 0;
         $hrid = -1;
-        foreach($seats as $index => $item){
+        foreach($firstseats as $index => $item){
             if($item == "Full") {$fullSeatsCount ++; $totalprice += 50;}
             if($item == "Disable") $disableSeatsCount ++;
             if($item == "Empty") $emptySeatsCount ++;
@@ -48,6 +49,7 @@ class ClassController extends Controller
             'selectedNum',
             'step',
             'seats',
+            'firstseats',
             'seatsDirection',
             'profile',
             'profile2',

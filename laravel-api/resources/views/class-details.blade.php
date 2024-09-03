@@ -118,7 +118,7 @@
                 <hr class="bg-black h-[4px] mt-14 w-full" />
                 <div class="flex flex-row flex-wrap w-full justify-between relative">
 
-                    @foreach($seats as $index => $item)
+                    @foreach($firstseats as $index => $item)
                     @if($index == 2 || $index == 6 || $index == 10)
                     <div class="w-[11%]"></div>
                     <div class="w-[11%]"></div>
@@ -328,7 +328,7 @@
                     </div>
                     @else
 
-                    @foreach($seats as $index => $item)
+                    @foreach($firstseats as $index => $item)
                     @if($item === 'Full')
                     @if($hrid == 1)
                     <hr id="seathr{{$hrid}}" class="bg-[#dad9d8] h-[3px] w-full" />
@@ -467,13 +467,10 @@
         var totalprice = <?= $totalprice ?>;
         var hrid = <?= $hrid ?>;
         var seats = <?= @json_encode($seats) ?>;
+        var selectedTimeSeats = seats[0];
         var seatsDirection = <?= @json_encode($seatsDirection) ?>;
 
         $(document).ready(function() {
-            const gotoHome = () => {
-                window.parent.location.href = "http://localhost:3000";
-                // window.parent.location.href= env('Parent_URL', 'default_value');
-            }
             $(".am").on('click', function(e) {
                 // e.target["id"]
                 $(".am").removeClass("border-b-2 border-[#fbee21]");
@@ -536,7 +533,7 @@
                         $(e.target).parent(".seats").html(
                             " <img width='50' height='50' src='{{asset('imgs/icons/38.png')}}' alt='logo' class='seat-Full cursor-pointer'>"
                         )
-                    seats[seatid] = "Full";
+                        selectedTimeSeats[seatid] = "Full";
 
                     fullSeatsCount++;
                     hrid = seatid;
@@ -552,13 +549,13 @@
                         )
                     fullSeatsCount--;
 
-                    seats[seatid] = "Empty";
+                    selectedTimeSeats[seatid] = "Empty";
                 }
 
                 var virtid = 0;
                 var seatHtml = '';
 
-                seats.forEach((item, id) => {
+                selectedTimeSeats.forEach((item, id) => {
                     if (item === "Full") {
                         if (virtid === 1) {
                             seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
@@ -600,11 +597,11 @@
                 console.log(deleteid);
                 console.log('====================================');
 
-                seats[deleteid] = "Empty";
+                selectedTimeSeats[deleteid] = "Empty";
                 var virtid = 0;
                 var seatHtml = '';
                 fullSeatsCount--;
-                seats.forEach((item, id) => {
+                selectedTimeSeats.forEach((item, id) => {
                     if (item === "Full") {
                         if (virtid === 1) {
                             seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
@@ -685,7 +682,6 @@
         })
 
 
-        // var step = <?php echo $step; ?>;
         // const getData = () => {
         //     fetch("{{route('api.data')}}", {
         //         method:"POST",
