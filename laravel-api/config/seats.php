@@ -2,7 +2,7 @@
 
 return [
     'list' => [
-        "Full", "Disable", "Empty", "Full", "Disable", "Empty", "Full", "Disable",
+        "Empty", "Disable", "Empty", "Full", "Disable", "Empty", "Full", "Disable",
         "Full", "Disable", "Empty", "Full", "Disable", "Empty", "Full", "Disable",
         "Full", "Disable", "Empty", "Full", "Disable", "Empty", "Full", "Disable",
         "Full", "Disable", "Empty", "Full", "Disable", "Empty", "Full", "Disable",

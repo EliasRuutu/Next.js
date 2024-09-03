@@ -28,6 +28,7 @@ class ClassController extends Controller
         $fullSeatsCount = 0;
         $disableSeatsCount = 0;
         $emptySeatsCount = 0;
+        $hrid = -1;
         foreach($seats as $index => $item){
             if($item == "Full") {$fullSeatsCount ++; $totalprice += 50;}
             if($item == "Disable") $disableSeatsCount ++;
@@ -54,7 +55,8 @@ class ClassController extends Controller
             'fullSeatsCount',
             'disableSeatsCount',
             'emptySeatsCount',
-            'totalprice'
+            'totalprice',
+            'hrid'
 
         ))->with([
             'getFutureDateInSpanish' => function($days) { return $this->getFutureDateInSpanish($days); },

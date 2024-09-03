@@ -327,12 +327,17 @@
                         No haz seleccionado tus lugares
                     </div>
                     @else
+
                     @foreach($seats as $index => $item)
                     @if($item === 'Full')
-                    <div id="seatBlock{{$index}}" class="w-full flex flex-col gap-3">
-                        @if($index > 0)
-                        <hr id="seathr{{$index}}" class="bg-[#dad9d8] h-[3px] w-full" />
-                        @endif
+                    @if($hrid == 1)
+                    <hr id="seathr{{$hrid}}" class="bg-[#dad9d8] h-[3px] w-full" />
+                    @endif
+
+                    @php
+                    $hrid = 1;
+                    @endphp
+                    <div class="w-full flex flex-col gap-3">
                         <div class="flex justify-between">
                             <div
                                 style="font-family: KommonSemiBold;"
@@ -458,8 +463,9 @@
 
         var weekth = <?= $weekth ?>;
         var step = <?= $step ?>;
-        var fullSeatsCount = <?= $fullSeatsCount ?>
-
+        var fullSeatsCount = <?= $fullSeatsCount ?>;
+        var hrid = <?= $hrid ?>;
+        var seats = <?= @json_encode($seats) ?>;
 
         $(document).ready(function() {
             const gotoHome = () => {
@@ -519,9 +525,6 @@
                 var seatState = e.target.classList[0].split("-")[1];
                 var seatDirection = e.target.classList[1];
                 var seatid = e.target.parentElement["id"].split("-")[1];
-                console.log('====================================');
-                console.log(seatid);
-                console.log('====================================');
                 if (seatState == "Empty") {
                     if (seatDirection == "transform")
                         $(e.target).parent(".seats").html(
@@ -531,19 +534,11 @@
                         $(e.target).parent(".seats").html(
                             " <img width='50' height='50' src='{{asset('imgs/icons/38.png')}}' alt='logo' class='seat-Full cursor-pointer'>"
                         )
-                    if (fullSeatsCount == 0) {
-                            $("#seatisEmpty").remove();
-                        $("#seat-detail").append(
-                            "<div id='seatBlock" + seatid + "' class='w-full flex flex-col gap-3'> <div class='flex justify-between'> <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'>   Adulto </div> <div style = 'font-family: KommonSemiBold;'class = 'text-[20px]' > $ 50.°° </div> </div> <div id = 'delete-"+seatid+"' style = 'font-family: KommonExtraBold;' class = 'trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer' > <img width = {20} height = {20} src = '{{asset('imgs/icons/45.png ')}}' alt = 'seat' class = 'w-5 h-5' > Eliminar </div> </div>"
-                        )
-                    }
-                    else {
-                        $("#seat-detail").append(
-                            "<div id='seatBlock" + seatid + "' class='w-full flex flex-col gap-3'> <hr id='seathr"+seatid+"' class='bg-[#dad9d8] h-[3px] w-full' /> <div class='flex justify-between'> <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'>   Adulto </div> <div style = 'font-family: KommonSemiBold;'class = 'text-[20px]' > $ 50.°° </div> </div> <div id = 'delete-"+seatid+"' style = 'font-family: KommonExtraBold;' class = 'trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer' > <img width = {20} height = {20} src = '{{asset('imgs/icons/45.png ')}}' alt = 'seat' class = 'w-5 h-5' > Eliminar </div> </div>"
-                        )
-                    }
-                    fullSeatsCount++;
+                    seats[seatid] = "Full";
                     
+                    fullSeatsCount++;
+                    hrid = seatid;
+
                 } else if (seatState == "Full") {
                     if (seatDirection == "transform")
                         $(e.target).parent(".seats").html(
@@ -553,22 +548,77 @@
                         $(e.target).parent(".seats").html(
                             " <img width='50' height='50' src='{{asset('imgs/icons/40.png')}}' alt='logo' class='seat-Empty cursor-pointer'>"
                         )
-                    $("#seatBlock" + seatid).remove()
                     fullSeatsCount--;
-                    if (fullSeatsCount == 0) {
+                    
+                    seats[seatid] = "Empty";
+                }
+
+                var virtid = 0;
+                var seatHtml = '';
+
+                seats.forEach((item, id) => {
+                    if (item === "Full") {
+                        if (virtid === 1) {
+                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
+                        }
+                        seatHtml += `
+                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                            <div class='flex justify-between'>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                                    Adulto
+                                </div>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                            </div>
+                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class='w-5 h-5'>
+                                Eliminar
+                            </div>
+                        </div>`;
+                        virtid = 1;
+                    }
+                });
+
+                $("#seat-detail").html(seatHtml);
+                if (fullSeatsCount == 0) {
                         $("#seat-detail").html(
                             "<div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>"
                         )
-                    }
-
                 }
-
-
-
-
-
             })
+            $(".trash-btn").on('click', function(e){
+                var deleteid = e.target.parentElement["id"].split("-")[1];
+                console.log('====================================');
+                console.log(deleteid);
+                console.log('====================================');
+                seats[deleteid] = "Empty";
+                var virtid = 0;
+                var seatHtml = '';
+                seats.forEach((item, id) => {
+                    if (item === "Full") {
+                        if (virtid === 1) {
+                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
+                        }
+                        seatHtml += `
+                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                            <div class='flex justify-between'>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                                    Adulto
+                                </div>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                            </div>
+                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class='w-5 h-5'>
+                                Eliminar
+                            </div>
+                        </div>`;
+                        virtid = 1;
+                    }
+                });
 
+                $("#seat-detail").html(seatHtml);
+            })
             $("#step-12").on('click', function(e) {
                 $('.step-1').removeClass("flex");
                 $('.step-1').addClass("hidden");
