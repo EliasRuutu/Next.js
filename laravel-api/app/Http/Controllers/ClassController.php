@@ -19,7 +19,7 @@ class ClassController extends Controller
         ];
         $homeUrl = env('Parent_URL', 'default_value');
         $today = Carbon::today();
-        $selectedDate = $this->getFutureDateInSpanish(5);
+        $selectedDate = 0;
         $selectedTime = '7:00 - 8:00 AM';
         $weekth = 0;
         $selectedNum = 0;

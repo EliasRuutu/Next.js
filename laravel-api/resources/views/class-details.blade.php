@@ -116,7 +116,7 @@
                     </div>
                 </div>
                 <hr class="bg-black h-[4px] mt-14 w-full" />
-                <div class="flex flex-row flex-wrap w-full justify-between relative">
+                <div class="flex flex-row flex-wrap w-full justify-between relative seatsBlock">
 
                     @foreach($firstseats as $index => $item)
                     @if($index == 2 || $index == 6 || $index == 10)
@@ -304,7 +304,7 @@
                 <div
                     style="font-family: KommonSemiBold;"
                     class="text-[20px]">
-                    <span id="selectedDate">{{$selectedDate}}</span> , <span id="selectedTime">{{$selectedTime}}</span>
+                    <span id="selectedDate">{{$getFutureDateInSpanish($selectedDate)}}</span> , <span id="selectedTime">{{$selectedTime}}</span>
                 </div>
             </div>
             <div>
@@ -459,6 +459,29 @@
             // Replace the month abbreviation to a more readable format
             return formattedDate.replace('.', ''); // Removes the dot from the month abbreviation
         };
+        const timeOrder = (inputTime) => {
+            switch (inputTime){
+                case "7:00 - 8:00 AM": 
+                    return 0;  break;
+                case "8:00 - 9:00 AM": 
+                    return 1;  break;
+                case "9:00 - 10:00 AM": 
+                    return 2;  break;
+                case "10:00 - 11:00 AM": 
+                    return 3;  break;
+                case "5:00 - 6:00 PM": 
+                    return 4;  break;
+                case "6:00 - 7:00 PM": 
+                    return 5;  break;
+                case "7:00 - 8:00 PM": 
+                    return 6;  break;
+                case "8:00 - 9:00 PM": 
+                    return 7;  break;
+                default: 
+                    return 0;  break;
+                
+            }
+        }
 
 
         var weekth = <?= $weekth ?>;
@@ -467,6 +490,8 @@
         var totalprice = <?= $totalprice ?>;
         var hrid = <?= $hrid ?>;
         var seats = <?= @json_encode($seats) ?>;
+        var selectedDate = <?= $selectedDate ?>;
+        var selectedTime = '<?= $selectedTime ?>';
         var selectedTimeSeats = seats[0];
         var seatsDirection = <?= @json_encode($seatsDirection) ?>;
 
@@ -474,22 +499,208 @@
             $(".am").on('click', function(e) {
                 // e.target["id"]
                 $(".am").removeClass("border-b-2 border-[#fbee21]");
-                $(e.target).addClass("border-b-2 border-[#fbee21]")
-                $("#selectedTime").html($(e.target).html())
+                $(e.target).addClass("border-b-2 border-[#fbee21]");
+                $("#selectedTime").html($(e.target).html());
+                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
+                selectedTimeSeats = seats[selectedSeatsNum];
+                fullSeatsCount = 0;
+                for(let i = 0; i < selectedTimeSeats.length; i++){
+                    if(selectedTimeSeats[i]=='Empty') 
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/40.png')}}"
+                                alt="logo"
+                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    else if(selectedTimeSeats[i]=='Full') {
+                        fullSeatsCount ++;
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/38.png')}}"
+                                alt="logo"
+                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    }
+                        
+                    else
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/39.png')}}"
+                                alt="logo"
+                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                }
+                var virtid = 0;
+                var seatHtml = '';
+
+                selectedTimeSeats.forEach((item, id) => {
+                    if (item === "Full") {
+                        if (virtid === 1) {
+                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
+                        }
+                        seatHtml += `
+                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                            <div class='flex justify-between'>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                                    Adulto
+                                </div>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                            </div>
+                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
+                                <div>Eliminar</div>
+                            </div>
+                        </div>`;
+                        virtid = 1;
+                    }
+                });
+                if(fullSeatsCount == 0)
+                seatHtml += `
+                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
+                `;
+                $("#seat-detail").html(seatHtml);
+                
+                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
+                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
             })
 
             $(".pm").on('click', function(e) {
                 // e.target["id"]
                 $(".pm").removeClass("border-b-2 border-[#fbee21]");
-                $(e.target).addClass("border-b-2 border-[#fbee21]")
-                $("#selectedTime").html($(e.target).html())
+                $(e.target).addClass("border-b-2 border-[#fbee21]");
+                $("#selectedTime").html($(e.target).html());
+                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
+                selectedTimeSeats = seats[selectedSeatsNum];
+                fullSeatsCount = 0;
+                for(let i = 0; i < selectedTimeSeats.length; i++){
+                    if(selectedTimeSeats[i]=='Empty') 
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/40.png')}}"
+                                alt="logo"
+                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    else if(selectedTimeSeats[i]=='Full') {
+                        fullSeatsCount ++;
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/38.png')}}"
+                                alt="logo"
+                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    }
+                        
+                    else
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/39.png')}}"
+                                alt="logo"
+                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                }
+                var virtid = 0;
+                var seatHtml = '';
+
+                selectedTimeSeats.forEach((item, id) => {
+                    if (item === "Full") {
+                        if (virtid === 1) {
+                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
+                        }
+                        seatHtml += `
+                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                            <div class='flex justify-between'>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                                    Adulto
+                                </div>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                            </div>
+                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
+                                <div>Eliminar</div>
+                            </div>
+                        </div>`;
+                        virtid = 1;
+                    }
+                });
+                if(fullSeatsCount == 0)
+                seatHtml += `
+                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
+                `;
+                $("#seat-detail").html(seatHtml);
+                
+                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
+                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
             })
 
             $(".time-select-block").on('click', function(e) {
 
                 $(".time-select-block").removeClass("bg-[#c60384] text-white");
-                $(e.target).addClass("bg-[#c60384] text-white")
-                $("#selectedTime").html($(e.target).html())
+                $(e.target).addClass("bg-[#c60384] text-white");
+                $("#selectedTime").html($(e.target).html());
+                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
+                selectedTimeSeats = seats[selectedSeatsNum];
+                fullSeatsCount = 0;
+                for(let i = 0; i < selectedTimeSeats.length; i++){
+                    if(selectedTimeSeats[i]=='Empty') 
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/40.png')}}"
+                                alt="logo"
+                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    else if(selectedTimeSeats[i]=='Full') {
+                        fullSeatsCount ++;
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/38.png')}}"
+                                alt="logo"
+                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    }
+                        
+                    else
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/39.png')}}"
+                                alt="logo"
+                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                }
+                var virtid = 0;
+                var seatHtml = '';
+
+                selectedTimeSeats.forEach((item, id) => {
+                    if (item === "Full") {
+                        if (virtid === 1) {
+                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
+                        }
+                        seatHtml += `
+                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                            <div class='flex justify-between'>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                                    Adulto
+                                </div>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                            </div>
+                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
+                                <div>Eliminar</div>
+                            </div>
+                        </div>`;
+                        virtid = 1;
+                    }
+                });
+                if(fullSeatsCount == 0)
+                seatHtml += `
+                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
+                `;
+                $("#seat-detail").html(seatHtml);
+                
+                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
+                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
             })
             $("#next-btn").on('click', function(e) {
                 if (weekth < 3) {
@@ -517,13 +728,80 @@
                 $('.selected-day-block').removeClass("border-b-2 border-[#fbee21]");
                 $(e.target).parent(".selected-day-block").addClass("border-b-2 border-[#fbee21]");
                 var selectedNum = e.target.parentElement["id"].split("-")[2];
-                $("#selectedDate").text(getFutureDateInSpanish(parseInt(weekth) * 7 + parseInt(selectedNum) - 1));
-            })
+                selectedDate = parseInt(weekth) * 7 + parseInt(selectedNum) - 1;
+                $("#selectedDate").text(getFutureDateInSpanish(selectedDate));
+                
+                var selectedSeatsNum = selectedDate * 8 + timeOrder($("#selectedTime").text());
+                selectedTimeSeats = seats[selectedSeatsNum];
+                fullSeatsCount = 0;
+                for(let i = 0; i < selectedTimeSeats.length; i++){
+                    if(selectedTimeSeats[i]=='Empty') 
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/40.png')}}"
+                                alt="logo"
+                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    else if(selectedTimeSeats[i]=='Full') {
+                        fullSeatsCount ++;
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/38.png')}}"
+                                alt="logo"
+                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    }
+                        
+                    else
+                        $("#seat-"+ i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/39.png')}}"
+                                alt="logo"
+                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                }
+                var virtid = 0;
+                var seatHtml = '';
 
+                selectedTimeSeats.forEach((item, id) => {
+                    if (item === "Full") {
+                        if (virtid === 1) {
+                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
+                        }
+                        seatHtml += `
+                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                            <div class='flex justify-between'>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                                    Adulto
+                                </div>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                            </div>
+                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
+                                <div>Eliminar</div>
+                            </div>
+                        </div>`;
+                        virtid = 1;
+                    }
+                });
+                if(fullSeatsCount == 0)
+                seatHtml += `
+                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
+                `;
+                $("#seat-detail").html(seatHtml);
+                
+                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
+                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
+            })
             $(".seats").on('click', function(e) {
                 var seatState = e.target.classList[0].split("-")[1];
                 var seatDirection = e.target.classList[1];
-                var seatid = e.target.parentElement["id"].split("-")[1];
+                var seatid = e.target.parentElement.id.split('-')[1];
+                console.log('====================================');
+                console.log(seatState);
+                console.log(seatDirection);
+                console.log('====================================');
                 if (seatState == "Empty") {
                     if (seatDirection == "transform")
                         $(e.target).parent(".seats").html(
@@ -587,15 +865,9 @@
                 $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
             })
             $("#seat-detail").on('click', '.trash-btn', function(e) {
-                console.log('====================================');
-                console.log("clicked");
-                console.log(e.target);
-                console.log('====================================');
+
                 if(e.target.id) var deleteid = e.target.id.split('-')[1];
                 else var deleteid = e.target.parentElement.id.split('-')[1]; // Extract the index from the id
-                console.log('====================================');
-                console.log(deleteid);
-                console.log('====================================');
 
                 selectedTimeSeats[deleteid] = "Empty";
                 var virtid = 0;
@@ -607,19 +879,20 @@
                             seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
                         }
                         seatHtml += `
-                <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
-                    <div class='flex justify-between'>
-                        <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
-                            <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
-                            Adulto
-                        </div>
-                        <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
-                    </div>
-                    <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
-                        <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class='trash-btn w-5 h-5'>
-                        <div>Eliminar</div>
-                    </div>
-                </div>`;
+                            <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                                <div class='flex justify-between'>
+                                    <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                                        <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                                        Adulto
+                                    </div>
+                                    <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                                </div>
+                                <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                                    <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class='trash-btn w-5 h-5'>
+                                    <div>Eliminar</div>
+                                </div>
+                            </div>
+                        `;
                         virtid = 1;
                     }
                 });
