@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\SeatModel;
 
 class ClassController extends Controller
 {
@@ -11,6 +12,16 @@ class ClassController extends Controller
     public function show($id)
     {
         // Fetch class details based on $id 
+        $seats = config('seats.list');
+        $specialSeatsFromData = SeatModel::all(["id", "dateNum", "seatNum", "State"]);
+
+        for ($i = 0; $i < 240; $i++) {
+            for ($j = 0; $j < 39; $j++)
+                $seats[$i][$j] = 'Empty';
+        }
+        for ($i = 0; $i < count($specialSeatsFromData); $i++) {
+            $seats[$specialSeatsFromData[$i]['dateNum']][$specialSeatsFromData[$i]['seatNum']] = $specialSeatsFromData[$i]['State'];
+        }
 
         $classDetails = [
             'id' => $id,
@@ -19,19 +30,23 @@ class ClassController extends Controller
         ];
         $homeUrl = env('Parent_URL', 'default_value');
         $today = Carbon::today();
-        $selectedDate = $this->getFutureDateInSpanish(5);
+        $selectedDate = 0;
         $selectedTime = '7:00 - 8:00 AM';
         $weekth = 0;
         $selectedNum = 0;
-        $seats = config('seats.list');
+        $firstseats = $seats[0];
         $totalprice = 0;
         $fullSeatsCount = 0;
         $disableSeatsCount = 0;
         $emptySeatsCount = 0;
-        foreach($seats as $index => $item){
-            if($item == "Full") {$fullSeatsCount ++; $totalprice += 50;}
-            if($item == "Disable") $disableSeatsCount ++;
-            if($item == "Empty") $emptySeatsCount ++;
+        $hrid = -1;
+        foreach ($firstseats as $index => $item) {
+            if ($item == "Full") {
+                $fullSeatsCount++;
+                $totalprice += 50;
+            }
+            if ($item == "Disable") $disableSeatsCount++;
+            if ($item == "Empty") $emptySeatsCount++;
         }
         $seatsDirection = config('seatsDirection.list');
         $step = 1;
@@ -47,6 +62,7 @@ class ClassController extends Controller
             'selectedNum',
             'step',
             'seats',
+            'firstseats',
             'seatsDirection',
             'profile',
             'profile2',
@@ -54,14 +70,25 @@ class ClassController extends Controller
             'fullSeatsCount',
             'disableSeatsCount',
             'emptySeatsCount',
-            'totalprice'
+            'totalprice',
+            'hrid'
 
         ))->with([
-            'getFutureDateInSpanish' => function($days) { return $this->getFutureDateInSpanish($days); },
-            'getFutureDateInEnglish' => function($days) { return $this->getFutureDateInEnglish($days); },
-            'getWeekdayInSpanish' => function($date) { return $this->getWeekdayInSpanish($date); },
-            'getDayAndMonthInSpanish' => function($date) { return $this->getDayAndMonthInSpanish($date); },
-            'getClaseList' => function($clase) { return $this->getClaseList($clase); },
+            'getFutureDateInSpanish' => function ($days) {
+                return $this->getFutureDateInSpanish($days);
+            },
+            'getFutureDateInEnglish' => function ($days) {
+                return $this->getFutureDateInEnglish($days);
+            },
+            'getWeekdayInSpanish' => function ($date) {
+                return $this->getWeekdayInSpanish($date);
+            },
+            'getDayAndMonthInSpanish' => function ($date) {
+                return $this->getDayAndMonthInSpanish($date);
+            },
+            'getClaseList' => function ($clase) {
+                return $this->getClaseList($clase);
+            },
         ]);
         // return view('class-details', compact(
         //         'step', 'seats', 'seatsDirection'
@@ -76,7 +103,12 @@ class ClassController extends Controller
         // return response()->json(array("step" => $step));
 
     }
-
+    public function saveSeat(Request $req){
+        $data = $req->all();
+        $price = $data["totalprice"];
+        SeatModel::insert('insert into users (id, name) values (?, ?)', [1, 'Dayle']);
+        return response()->json(array("as" => "sdfsd"));
+    }
     private function getFutureDateInSpanish($days)
     {
         return Carbon::today()->addDays($days)->locale('es')->isoFormat('dddd D [de] MMMM');
