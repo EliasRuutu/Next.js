@@ -273,9 +273,8 @@
                 </div>
             </div>
             <div
-
                 style="font-family: KommonExtraBold;"
-                class="text-[32px] font-bold">
+                class="text-[32px] font-bold total-price">
                 $ {{$totalprice}}. °°
             </div>
         </div>
@@ -313,6 +312,7 @@
             </div>
             <div class="flex flex-col gap-2">
                 <div
+                    id="full-seats-count"
                     style="font-family: KommonExtraBold;"
                     class="text-[24px] font-bold">
                     BICICLETA ({{$fullSeatsCount}})
@@ -356,7 +356,7 @@
                             style="font-family: KommonExtraBold;"
                             class="trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer">
                             <img width={20} height={20} src="{{asset('imgs/icons/45.png')}}" alt="seat" class="w-5 h-5">
-                            Eliminar
+                            <div>Eliminar</div>
                         </div>
                     </div>
 
@@ -399,7 +399,7 @@
                     <div
 
                         style="font-family: KommonExtraBold;"
-                        class="text-[32px] font-bold">
+                        class="text-[32px] font-bold total-price">
                         $ {{$totalprice}}. °°
                     </div>
                 </div>
@@ -464,8 +464,10 @@
         var weekth = <?= $weekth ?>;
         var step = <?= $step ?>;
         var fullSeatsCount = <?= $fullSeatsCount ?>;
+        var totalprice = <?= $totalprice ?>;
         var hrid = <?= $hrid ?>;
         var seats = <?= @json_encode($seats) ?>;
+        var seatsDirection = <?= @json_encode($seatsDirection) ?>;
 
         $(document).ready(function() {
             const gotoHome = () => {
@@ -535,7 +537,7 @@
                             " <img width='50' height='50' src='{{asset('imgs/icons/38.png')}}' alt='logo' class='seat-Full cursor-pointer'>"
                         )
                     seats[seatid] = "Full";
-                    
+
                     fullSeatsCount++;
                     hrid = seatid;
 
@@ -549,7 +551,7 @@
                             " <img width='50' height='50' src='{{asset('imgs/icons/40.png')}}' alt='logo' class='seat-Empty cursor-pointer'>"
                         )
                     fullSeatsCount--;
-                    
+
                     seats[seatid] = "Empty";
                 }
 
@@ -571,54 +573,77 @@
                                 <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
                             </div>
                             <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
-                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class='w-5 h-5'>
-                                Eliminar
+                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
+                                <div>Eliminar</div>
                             </div>
                         </div>`;
                         virtid = 1;
                     }
                 });
-
+                if(fullSeatsCount == 0)
+                seatHtml += `
+                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
+                `;
                 $("#seat-detail").html(seatHtml);
-                if (fullSeatsCount == 0) {
-                        $("#seat-detail").html(
-                            "<div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>"
-                        )
-                }
+                
+                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
+                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
             })
-            $(".trash-btn").on('click', function(e){
-                var deleteid = e.target.parentElement["id"].split("-")[1];
+            $("#seat-detail").on('click', '.trash-btn', function(e) {
+                console.log('====================================');
+                console.log("clicked");
+                console.log(e.target);
+                console.log('====================================');
+                if(e.target.id) var deleteid = e.target.id.split('-')[1];
+                else var deleteid = e.target.parentElement.id.split('-')[1]; // Extract the index from the id
                 console.log('====================================');
                 console.log(deleteid);
                 console.log('====================================');
+
                 seats[deleteid] = "Empty";
                 var virtid = 0;
                 var seatHtml = '';
+                fullSeatsCount--;
                 seats.forEach((item, id) => {
                     if (item === "Full") {
                         if (virtid === 1) {
                             seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
                         }
                         seatHtml += `
-                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
-                            <div class='flex justify-between'>
-                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
-                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
-                                    Adulto
-                                </div>
-                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
-                            </div>
-                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
-                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class='w-5 h-5'>
-                                Eliminar
-                            </div>
-                        </div>`;
+                <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                    <div class='flex justify-between'>
+                        <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                            <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                            Adulto
+                        </div>
+                        <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                    </div>
+                    <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                        <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class='trash-btn w-5 h-5'>
+                        <div>Eliminar</div>
+                    </div>
+                </div>`;
                         virtid = 1;
                     }
                 });
-
+                if(fullSeatsCount == 0)
+                seatHtml += `
+                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
+                `;
                 $("#seat-detail").html(seatHtml);
-            })
+                if (seatsDirection[deleteid] == "left")
+                    $("#seat-"+deleteid).html(
+                        " <img width='50' height='50' src='{{asset('imgs/icons/40.png')}}' alt='logo' class='seat-Empty transform scale-x-[-1] cursor-pointer'>"
+                    )
+                else
+                    $("#seat-"+deleteid).html(
+                        " <img width='50' height='50' src='{{asset('imgs/icons/40.png')}}' alt='logo' class='seat-Empty cursor-pointer'>"
+                    )
+                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
+                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
+                
+            });
+
             $("#step-12").on('click', function(e) {
                 $('.step-1').removeClass("flex");
                 $('.step-1').addClass("hidden");
