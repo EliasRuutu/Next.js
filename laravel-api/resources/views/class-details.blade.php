@@ -4,6 +4,9 @@
 <head>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    @csrf
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
     <style>
         .custom-select {
             appearance: none;
@@ -15,18 +18,63 @@
 
         .custom-select-small {
             appearance: none;
+            background-color: rgb(217, 217, 217);
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='rgb(198, 3, 132)' viewBox='0 0 24 24' stroke='none'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-5 7-5-7 '%3E%3C/path%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 0.5rem center;
             background-size: 2em;
             position: relative;
         }
+
+        .custom-checkbox {
+            background-color: #f9fafb;
+            /* light gray */
+            text-align: center;
+            border: 2px solid red;
+            font-weight: 700;
+            /* dark gray */
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .custom-checkbox-label {
+            color: red;
+        }
+
+        .custom-checkbox-label.checked {
+            color: black;
+        }
+
+        .custom-checkbox.checked {
+            background-color: #dadada;
+            /* dark gray */
+            border: none;
+            text-align: center;
+            font-weight: 700;
+            /* dark gray */
+        }
+
+        .custom-checkbox.checked::after {
+            text-align: center;
+            content: '✔';
+            font-size: 30px;
+            font-weight: 700;
+            font-family: Arial, Helvetica, sans-serif;
+            width: 40px;
+            height: 40px;
+            border: none;
+            position: absolute;
+        }
     </style>
 </head>
 
 <body class="bg-white">
     <div class=" w-full lg:h-[95vh] overflow-y-hidden flex flex-col lg:flex-row">
-        <div class="w-full lg:w-8/12 flex flex-col justify-start items-start pl-12 lg:pl-24 pr-12 lg:pr-0 gap-5 {{ $step == 3 ? 'pt-2' : 'pt-12'}}">
+        <div class="w-full lg:w-8/12 flex flex-col justify-start items-start pl-12 lg:pl-24 pr-12 lg:pr-0 gap-5 {{ $step == 3 ? 'pt-0' : 'pt-12'}} overflow-y-auto">
             <div class="h-[600px] w-full">
                 <!-- dropdown button -->
                 <!-- <div class="flex gap-12 "> -->
@@ -46,7 +94,7 @@
                 <!-- step 1 -->
                 <div class="{{ $step == 1 ? 'flex' : 'hidden'}} flex-col justify-start items-start gap-5 mt-6 step-1">
                     <div class="flex gap-4 items-center">
-                        <div id="prev-btn" class="w-8 h-8 rounded-full bg-[#c60384] flex justify-center items-center text-white cursor-pointer">&lt;</div>
+                        <img id="prev-btn" src="{{asset('imgs/icons/36.png')}}" alt="prev" class="w-8 h-8 rounded-full bg-[#c60384] flex justify-center items-center text-white cursor-pointer" />
                         <div class="flex border-b-2 border-[#dad9d8] overflow-x-auto w-[70vw] lg:w-[53vw] select-day-block">
                             @for ($i = 1; $i <= 7; $i++)
                                 <div id="selected-day-{{$i}}" class="selected-day-block cursor-pointer flex flex-col justify-center items-center text-[24px] w-36 min-w-36">
@@ -55,17 +103,17 @@
                         </div>
                         @endfor
                     </div>
-                    <div id="next-btn" class="w-8 h-8 rounded-full bg-[#c60384] flex justify-center items-center text-white cursor-pointer">&gt;</div>
+                    <img id="next-btn" src="{{asset('imgs/icons/52.png')}}" alt="next" class="w-8 h-8 rounded-full bg-[#c60384] flex justify-center items-center text-white cursor-pointer" />
                 </div>
-                <div class="flex flex-wrap mt-12 px-9 justify-between gap-5">
-                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 text-[24px] w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">7:00 - 8:00 AM</div>
-                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 text-[24px] w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">8:00 - 9:00 AM</div>
-                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 text-[24px] w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">9:00 - 10:00 AM</div>
-                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 text-[24px] w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">10:00 - 11:00 AM</div>
-                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 text-[24px] w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">5:00 - 6:00 PM</div>
-                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 text-[24px] w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">6:00 - 7:00 PM</div>
-                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 text-[24px] w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">7:00 - 8:00 PM</div>
-                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 text-[24px] w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">8:00 - 9:00 PM</div>
+                <div class="flex flex-wrap mt-12 px-9 justify-between gap-5 text-[16px] leading-[18px] md:text-[24px]">
+                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 w-[45%] md:w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">7:00 - 8:00 AM</div>
+                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 w-[45%] md:w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">8:00 - 9:00 AM</div>
+                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 w-[45%] md:w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">9:00 - 10:00 AM</div>
+                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 w-[45%] md:w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">10:00 - 11:00 AM</div>
+                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 w-[45%] md:w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">5:00 - 6:00 PM</div>
+                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 w-[45%] md:w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">6:00 - 7:00 PM</div>
+                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 w-[45%] md:w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">7:00 - 8:00 PM</div>
+                    <div class="time-select-block  border-2 border-[#dad9d8] rounded-md p-4 w-[45%] md:w-[230px] cursor-pointer hover:bg-[#c60384] hover:text-[white]">8:00 - 9:00 PM</div>
                 </div>
             </div>
 
@@ -148,13 +196,13 @@
 
                     <div class="absolute -top-2 left-[50%] translate-x-[-50%] flex flex-col gap-2 justify-center items-center">
                         <div class="italic text-[20px]" style="font-family: KommonExtraBold;">FRENTE</div>
-                        <div class="bg-[#fbee21] rounded-lg w-44 h-24 "></div>
+                        <div class="bg-[#fbee21] rounded-lg w-[30vw] h-[15vw] md:w-44 md:h-24 "></div>
                     </div>
                 </div>
             </div>
 
             <!-- step3 -->
-            <div class="w-full  {{ $step == 3 ? 'flex' : 'hidden'}} flex-col 2xl:pr-[40px] xl:pr-[20px] pr-[0px] step-3">
+            <div class="w-full  {{ $step == 3 ? 'flex' : 'hidden'}} flex-col 2xl:pr-[40px] xl:pr-[20px] pr-[10px] step-3 ">
                 <div class="w-full flex flex-col gap-4 ">
                     <div class=" flex justify-between items-center">
                         <div class="flex gap-4 items-center">
@@ -165,33 +213,67 @@
                             </div>
                         </div>
                         @if($profile == true)
-                        <img width={25} height={25} src="{{asset('imgs/icons/44.png')}}" alt="seat" class="w-6 h-6 cursor-pointer">
+                        <img id="detail1-reverse" width={25} height={25} src="{{asset('imgs/icons/44.png')}}" alt="seat" class="w-6 h-6 cursor-pointer">
                         @else
-                        <img width={25} height={25} src="{{asset('imgs/icons/43.png')}}" alt="seat" class="w-6 h-6 cursor-pointer">
+                        <img id="detail1" width={25} height={25} src="{{asset('imgs/icons/43.png')}}" alt="seat" class="w-6 h-6 cursor-pointer">
                         @endif
                     </div>
                     <hr class="bg-[#dad9d8] h-[6px] w-full" />
-                    @if($profile == true)
-                    <div class="flex flex-row justify-between items-center gap-8 text-[20px]">
-                        <div class="flex flex-1 relative">
-                            <input type="text" class=" h-12 rounded-lg outline outline-[#dad9d8] px-4 w-full">
-                            <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="seat" class="w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                    <div class="w-full flex flex-col gap-6 profile-detail1">
+                        @if($profile == true)
+                        <div class="flex flex-col w-full md:flex-row justify-between items-center gap-4 md:gap-8 text-[20px]">
+                            <div class="flex w-full md:flex-1 relative">
+                                <div class=" h-12 rounded-lg w-full relative">
+                                    <input type="text" id="name-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                        <div class="text-[#d9d9d9] text-[12px]">Nombre(s)</div>
+                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden name-valid">
+                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden name-invalid">
+                                    </div>
+                                    <div class="text-red-600 italic text-xs ml-4 hidden name-invalid">Debes ingresar caracteres alfabéticos.</div>
+                                </div>
+                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                            </div>
+                            <div class="flex w-full md:flex-1 relative">
+                                <div class=" h-12 rounded-lg w-full relative">
+                                    <input type="text" id="lastname-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                        <div class="text-[#d9d9d9] text-[12px]">Apellidos(s)</div>
+                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden lastname-valid">
+                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden lastname-invalid">
+                                    </div>
+                                    <div class="text-red-600 italic text-xs ml-4 hidden lastname-invalid">Debes ingresar caracteres alfabéticos.</div>
+                                </div>
+                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                            </div>
+                            <div class="flex w-full md:flex-1 relative">
+                                <div class=" h-12 rounded-lg w-full relative">
+                                    <input type="text" id="phone-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                        <div class="text-[#d9d9d9] text-[12px]">Teléfono</div>
+                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden phone-valid">
+                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden phone-invalid">
+                                    </div>
+                                    <div class="text-red-600 italic text-xs ml-4 hidden phone-invalid">El número de teléfono no es válido.</div>
+                                </div>
+                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                            </div>
                         </div>
-                        <div class="flex flex-1 relative">
-                            <input type="text" class=" h-12 rounded-lg outline outline-[#dad9d8] px-4 w-full">
-                            <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="seat" class="w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                        <div class=" w-full relative">
+                            <div class=" h-12 rounded-lg w-full relative">
+                                <input type="text" id="email-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                    <div class="text-[#d9d9d9] text-[12px]">Correo electrónico</div>
+                                    <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden email-valid">
+                                    <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden email-invalid">
+                                </div>
+                                <div class="text-red-600 italic text-xs ml-4 hidden email-invalid">El correo electrónico no es válido.</div>
+                            </div>
+                            <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
                         </div>
-                        <div class="flex flex-1 relative">
-                            <input type="text" class=" h-12 rounded-lg outline outline-[#dad9d8] px-4 w-full">
-                            <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="seat" class="w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
-                        </div>
+                        <button class="profile-valid w-full bg-[#d9d9d9] h-12 rounded-lg text-[24px]" style="font-family: KommonExtraBold;">CONTINUAR</button>
+                        @endif
                     </div>
-                    <div class="w-full relative">
-                        <input type="text" class="flex w-full text-[20px] py-2 px-4 rounded-lg outline outline-[#dad9d8] ">
-                        <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="seat" class="w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
-                    </div>
-                    <button class="w-full bg-[#fbee21] h-12 rounded-lg text-[24px]" style="font-family: KommonExtraBold;">CONTINUAR</button>
-                    @endif
                 </div>
                 <div class="w-full flex flex-col gap-4 ">
                     <div class=" flex justify-between items-center">
@@ -203,55 +285,85 @@
                             </div>
                         </div>
                         @if($profile2 == true)
-                        <img width={25} height={25} src="{{asset('imgs/icons/44.png')}}" alt="seat" class="w-6 h-6 cursor-pointer">
+                        <img id="detail2-reverse" width={25} height={25} src="{{asset('imgs/icons/44.png')}}" alt="seat" class="w-6 h-6 cursor-pointer">
                         @else
-                        <img width={25} height={25} src="{{asset('imgs/icons/43.png')}}" alt="seat" class="w-6 h-6 cursor-pointer">
+                        <img id="detail2" width={25} height={25} src="{{asset('imgs/icons/43.png')}}" alt="seat" class="w-6 h-6 cursor-pointer">
                         @endif
                     </div>
                     <hr class="bg-[#dad9d8] h-[6px] w-full" />
-                    @if($profile2 == true)
-                    <div class="flex flex-row justify-between items-center gap-8 text-[20px]">
-                        <div class="flex flex-[7] relative">
-                            <input type="text" class=" h-12 rounded-lg outline outline-[#dad9d8] px-4 w-full">
-                            <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="seat" class="w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                    <div class="w-full flex flex-col gap-4 profile-detail2">
+                        @if($profile2 == true)
+                        <div class="flex w-full flex-col md:flex-row justify-between items-center gap-4 text-[20px]">
+                            <div class="flex w-full md:flex-[5] relative">
+                                <div class=" h-12 rounded-lg w-full relative">
+                                    <input type="text" id="card-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                        <div class="text-[#d9d9d9] text-[12px]">Número de tarjeta</div>
+                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden card-valid">
+                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden card-invalid">
+                                    </div>
+                                    <div class="text-red-600 italic text-xs ml-4 hidden card-invalid">Forma de pago no válida o no compatible.</div>
+                                </div>
+                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                            </div>
+
+                            <div class="flex w-full md:flex-1 relative md:min-w-28">
+                                <div class="custom-select-wrapper w-full">
+                                    <div class="custom-select-small custom-select-trigger text-[24px] font-bold text-[#c60384] rounded-lg pl-2 py-3 pr-12 bg-[#f6f3f3] cursor-pointer w-full ">
+                                        Mes
+                                    </div>
+                                    <div class="custom-options hidden text-[18px]">
+                                        <div class="custom-option month-field">Enero</div>
+                                        <div class="custom-option month-field">Febrero</div>
+                                        <div class="custom-option month-field">Marzo</div>
+                                        <div class="custom-option month-field">Abril</div>
+                                        <div class="custom-option month-field">Mayo</div>
+                                        <div class="custom-option month-field">Junio</div>
+                                        <div class="custom-option month-field">Julio</div>
+                                        <div class="custom-option month-field">Agosto</div>
+                                        <div class="custom-option month-field">Septiembre</div>
+                                        <div class="custom-option month-field">Octubre</div>
+                                        <div class="custom-option month-field">Noviembre</div>
+                                        <div class="custom-option month-field">Diciembre</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex w-full md:flex-1 relative md:min-w-28">
+                                <div class="custom-select-wrapper w-full">
+                                    <div class=" custom-select-small custom-select-trigger text-[24px] font-bold text-[#c60384] rounded-lg pl-2 py-3 pr-12 bg-[#f6f3f3] cursor-pointer w-full">
+                                        Año
+                                    </div>
+                                    <div class="custom-options hidden text-[18px]">
+                                        <div class="custom-option year-field">2029</div>
+                                        <div class="custom-option year-field">2028</div>
+                                        <div class="custom-option year-field">2027</div>
+                                        <div class="custom-option year-field">2026</div>
+                                        <div class="custom-option year-field">2025</div>
+                                        <div class="custom-option year-field">2024</div>
+                                        <div class="custom-option year-field">2023</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex w-full md:flex-1 relative">
+                                <div class=" h-12 rounded-lg w-full relative">
+                                    <input type="text" id="cvv-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                        <div class="text-[#d9d9d9] text-[12px]">CVV</div>
+                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden cvv-valid">
+                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden cvv-invalid">
+                                    </div>
+                                    <div class="text-red-600 italic text-xs ml-4 hidden cvv-invalid">Forma de pago no válida o no compatible.</div>
+                                </div>
+                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                            </div>
                         </div>
-                        <div class="flex flex-1 relative">
-                            <select name="Classes" id="classes" class="custom-select-small text-[20px] text-[#c60384] rounded-lg pl-2 py-3 bg-[#f6f3f3] cursor-pointer w-full">
-                                <option value="Mes">Mes</option>
-                                <option value="Enero">Enero</option>
-                                <option value="Febrero">Febrero</option>
-                                <option value="Marzo">Marzo</option>
-                                <option value="Abril">Abril</option>
-                                <option value="Mayo">Mayo</option>
-                                <option value="Junio">Junio</option>
-                                <option value="Julio">Julio</option>
-                                <option value="Agosto">Agosto</option>
-                                <option value="Septiembre">Septiembre</option>
-                                <option value="Octubre">Octubre</option>
-                                <option value="Noviembre">Noviembre</option>
-                                <option value="Diciembre">Diciembre</option>
-                            </select>
+                        <div class="w-full relative flex items-center gap-6">
+                            <div class="custom-checkbox min-w-10 max-h-10 min-h-10 checkbox"></div>
+                            <div class="text-red-600 text-[20px] checkbox cursor-pointer">Estoy de acuerdo con los Términos y condiciones, políticas de cancelación y de promoción así como los servicios que se muestran en el desglose de mi compra son los que solicito.</div>
                         </div>
-                        <div class="flex flex-1 relative">
-                            <select name="Classes" id="classes" class="custom-select-small text-[20px] text-[#c60384] rounded-lg pl-2 py-3 bg-[#f6f3f3] cursor-pointer w-full">
-                                <option value="Año">Año</option>
-                                <option value="Año9">2029</option>
-                                <option value="Año8">2028</option>
-                                <option value="Año7">2027</option>
-                                <option value="Año6">2026</option>
-                            </select>
-                        </div>
-                        <div class="flex flex-1 relative">
-                            <input type="text" class=" h-12 rounded-lg outline outline-[#dad9d8] px-4 w-full">
-                            <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="seat" class="w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
-                        </div>
+                        <button class="pay-valid w-full bg-[#d9d9d9] h-12 rounded-lg text-[24px]" style="font-family: KommonExtraBold;">CONTINUAR</button>
+                        @endif
                     </div>
-                    <div class="w-full relative flex items-center gap-6">
-                        <input type="checkbox" class="w-14 h-14">
-                        <div class="text-[20px]">Estoy de acuerdo con los Términos y condiciones, políticas de cancelación y de promoción así como los servicios que se muestran en el desglose de mi compra son los que solicito.</div>
-                    </div>
-                    <button class="w-full bg-[#fbee21] h-12 rounded-lg text-[24px]" style="font-family: KommonExtraBold;">CONTINUAR</button>
-                    @endif
                 </div>
             </div>
         </div>
@@ -278,7 +390,7 @@
                 $ {{$totalprice}}. °°
             </div>
         </div>
-        <div class="bg-white border-gray-950 border-2 w-full 2xl:w-[90%] max-h-[380px] lg:max-h-[380px] rounded-md px-6 flex flex-col gap-3 overflow-auto ">
+        <div class="bg-white border-gray-950 border-2 w-full 2xl:w-[90%] max-h-[380px] lg:max-h-[470px] rounded-md px-6 flex flex-col gap-3 overflow-auto ">
             <div class="flex flex-col">
                 <div
                     style="font-family: KommonExtraBold;"
@@ -389,7 +501,7 @@
                     class="  {{ $step == 2 ? 'flex' : 'hidden'}} justify-center items-center text-[24px] font-bold bg-white rounded-md py-2 step-2">
                     VOLVER
                 </button>
-                <hr class="bg-[#dad9d8] h-[6px] mt-14 w-full step-3  {{ $step == 3 ? 'flex' : 'hidden'}}" />
+                <hr class="bg-[#dad9d8] h-[6px] w-full step-3  {{ $step == 3 ? 'flex' : 'hidden'}}" />
                 <div class="justify-between text-[#c60384] mb-4 step-3  {{ $step == 3 ? 'flex' : 'hidden'}}">
                     <div
                         style="font-family: KommonExtraBold;"
@@ -408,6 +520,12 @@
     </div>
     </div>
     <script lanugage="javascript">
+        // Link to Home
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         const gotoHome = () => {
             window.parent.location.href = "<?= $homeUrl ?>";
         }
@@ -459,30 +577,93 @@
             // Replace the month abbreviation to a more readable format
             return formattedDate.replace('.', ''); // Removes the dot from the month abbreviation
         };
+
         const timeOrder = (inputTime) => {
-            switch (inputTime){
-                case "7:00 - 8:00 AM": 
-                    return 0;  break;
-                case "8:00 - 9:00 AM": 
-                    return 1;  break;
-                case "9:00 - 10:00 AM": 
-                    return 2;  break;
-                case "10:00 - 11:00 AM": 
-                    return 3;  break;
-                case "5:00 - 6:00 PM": 
-                    return 4;  break;
-                case "6:00 - 7:00 PM": 
-                    return 5;  break;
-                case "7:00 - 8:00 PM": 
-                    return 6;  break;
-                case "8:00 - 9:00 PM": 
-                    return 7;  break;
-                default: 
-                    return 0;  break;
-                
+            switch (inputTime) {
+                case "7:00 - 8:00 AM":
+                    return 0;
+                    break;
+                case "8:00 - 9:00 AM":
+                    return 1;
+                    break;
+                case "9:00 - 10:00 AM":
+                    return 2;
+                    break;
+                case "10:00 - 11:00 AM":
+                    return 3;
+                    break;
+                case "5:00 - 6:00 PM":
+                    return 4;
+                    break;
+                case "6:00 - 7:00 PM":
+                    return 5;
+                    break;
+                case "7:00 - 8:00 PM":
+                    return 6;
+                    break;
+                case "8:00 - 9:00 PM":
+                    return 7;
+                    break;
+                default:
+                    return 0;
+                    break;
+
             }
         }
 
+        function isSpanishEnglishAlphabetic(input) {
+            const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+$/;
+            return regex.test(input);
+        }
+
+        function isValidEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        function isValidCVV(cvv) {
+            const regex = /^[0-9]{3,4}$/;
+            return regex.test(cvv);
+        }
+
+        function isValidPhoneNumber(phoneNumber) {
+            const regex = /^\+?[\d\s\-()]{7,15}$/;
+            return regex.test(phoneNumber);
+        }
+
+        function isValidCardNumber(cardNumber) {
+            // Remove any non-digit characters
+            const cleanedNumber = cardNumber.replace(/\D/g, '');
+
+            // Check if the number is between 13 and 19 digits long
+            if (!/^\d{13,19}$/.test(cleanedNumber)) {
+                return false;
+            }
+
+            // Implement Luhn algorithm
+            return luhnCheck(cleanedNumber);
+        }
+        // Luhn algorithm implementation
+        function luhnCheck(cardNumber) {
+            let sum = 0;
+            let isEven = false;
+
+            for (let i = cardNumber.length - 1; i >= 0; i--) {
+                let digit = parseInt(cardNumber.charAt(i), 10);
+
+                if (isEven) {
+                    digit *= 2;
+                    if (digit > 9) {
+                        digit -= 9;
+                    }
+                }
+
+                sum += digit;
+                isEven = !isEven;
+            }
+
+            return (sum % 10) === 0;
+        }
 
         var weekth = <?= $weekth ?>;
         var step = <?= $step ?>;
@@ -496,212 +677,8 @@
         var seatsDirection = <?= @json_encode($seatsDirection) ?>;
 
         $(document).ready(function() {
-            $(".am").on('click', function(e) {
-                // e.target["id"]
-                $(".am").removeClass("border-b-2 border-[#fbee21]");
-                $(e.target).addClass("border-b-2 border-[#fbee21]");
-                $("#selectedTime").html($(e.target).html());
-                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
-                selectedTimeSeats = seats[selectedSeatsNum];
-                fullSeatsCount = 0;
-                for(let i = 0; i < selectedTimeSeats.length; i++){
-                    if(selectedTimeSeats[i]=='Empty') 
-                        $("#seat-"+ i).html(`
-                                <img width="50" height="50"
-                                src="{{asset('imgs/icons/40.png')}}"
-                                alt="logo"
-                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
-                        `)
-                    else if(selectedTimeSeats[i]=='Full') {
-                        fullSeatsCount ++;
-                        $("#seat-"+ i).html(`
-                                <img width="50" height="50"
-                                src="{{asset('imgs/icons/38.png')}}"
-                                alt="logo"
-                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
-                        `)
-                    }
-                        
-                    else
-                        $("#seat-"+ i).html(`
-                                <img width="50" height="50"
-                                src="{{asset('imgs/icons/39.png')}}"
-                                alt="logo"
-                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
-                        `)
-                }
-                var virtid = 0;
-                var seatHtml = '';
 
-                selectedTimeSeats.forEach((item, id) => {
-                    if (item === "Full") {
-                        if (virtid === 1) {
-                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
-                        }
-                        seatHtml += `
-                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
-                            <div class='flex justify-between'>
-                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
-                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
-                                    Adulto
-                                </div>
-                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
-                            </div>
-                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
-                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
-                                <div>Eliminar</div>
-                            </div>
-                        </div>`;
-                        virtid = 1;
-                    }
-                });
-                if(fullSeatsCount == 0)
-                seatHtml += `
-                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
-                `;
-                $("#seat-detail").html(seatHtml);
-                
-                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
-                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
-            })
-
-            $(".pm").on('click', function(e) {
-                // e.target["id"]
-                $(".pm").removeClass("border-b-2 border-[#fbee21]");
-                $(e.target).addClass("border-b-2 border-[#fbee21]");
-                $("#selectedTime").html($(e.target).html());
-                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
-                selectedTimeSeats = seats[selectedSeatsNum];
-                fullSeatsCount = 0;
-                for(let i = 0; i < selectedTimeSeats.length; i++){
-                    if(selectedTimeSeats[i]=='Empty') 
-                        $("#seat-"+ i).html(`
-                                <img width="50" height="50"
-                                src="{{asset('imgs/icons/40.png')}}"
-                                alt="logo"
-                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
-                        `)
-                    else if(selectedTimeSeats[i]=='Full') {
-                        fullSeatsCount ++;
-                        $("#seat-"+ i).html(`
-                                <img width="50" height="50"
-                                src="{{asset('imgs/icons/38.png')}}"
-                                alt="logo"
-                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
-                        `)
-                    }
-                        
-                    else
-                        $("#seat-"+ i).html(`
-                                <img width="50" height="50"
-                                src="{{asset('imgs/icons/39.png')}}"
-                                alt="logo"
-                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
-                        `)
-                }
-                var virtid = 0;
-                var seatHtml = '';
-
-                selectedTimeSeats.forEach((item, id) => {
-                    if (item === "Full") {
-                        if (virtid === 1) {
-                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
-                        }
-                        seatHtml += `
-                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
-                            <div class='flex justify-between'>
-                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
-                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
-                                    Adulto
-                                </div>
-                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
-                            </div>
-                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
-                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
-                                <div>Eliminar</div>
-                            </div>
-                        </div>`;
-                        virtid = 1;
-                    }
-                });
-                if(fullSeatsCount == 0)
-                seatHtml += `
-                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
-                `;
-                $("#seat-detail").html(seatHtml);
-                
-                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
-                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
-            })
-
-            $(".time-select-block").on('click', function(e) {
-
-                $(".time-select-block").removeClass("bg-[#c60384] text-white");
-                $(e.target).addClass("bg-[#c60384] text-white");
-                $("#selectedTime").html($(e.target).html());
-                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
-                selectedTimeSeats = seats[selectedSeatsNum];
-                fullSeatsCount = 0;
-                for(let i = 0; i < selectedTimeSeats.length; i++){
-                    if(selectedTimeSeats[i]=='Empty') 
-                        $("#seat-"+ i).html(`
-                                <img width="50" height="50"
-                                src="{{asset('imgs/icons/40.png')}}"
-                                alt="logo"
-                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
-                        `)
-                    else if(selectedTimeSeats[i]=='Full') {
-                        fullSeatsCount ++;
-                        $("#seat-"+ i).html(`
-                                <img width="50" height="50"
-                                src="{{asset('imgs/icons/38.png')}}"
-                                alt="logo"
-                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
-                        `)
-                    }
-                        
-                    else
-                        $("#seat-"+ i).html(`
-                                <img width="50" height="50"
-                                src="{{asset('imgs/icons/39.png')}}"
-                                alt="logo"
-                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
-                        `)
-                }
-                var virtid = 0;
-                var seatHtml = '';
-
-                selectedTimeSeats.forEach((item, id) => {
-                    if (item === "Full") {
-                        if (virtid === 1) {
-                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
-                        }
-                        seatHtml += `
-                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
-                            <div class='flex justify-between'>
-                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
-                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
-                                    Adulto
-                                </div>
-                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
-                            </div>
-                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
-                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
-                                <div>Eliminar</div>
-                            </div>
-                        </div>`;
-                        virtid = 1;
-                    }
-                });
-                if(fullSeatsCount == 0)
-                seatHtml += `
-                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
-                `;
-                $("#seat-detail").html(seatHtml);
-                
-                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
-                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
-            })
+            // show 30 days in first step with violet buttons
             $("#next-btn").on('click', function(e) {
                 if (weekth < 3) {
                     weekth++;
@@ -724,36 +701,33 @@
                     )
                 }
             })
-            $(".select-day-block ").on('click', '.selected-day-block', function(e) {
-                $('.selected-day-block').removeClass("border-b-2 border-[#fbee21]");
-                $(e.target).parent(".selected-day-block").addClass("border-b-2 border-[#fbee21]");
-                var selectedNum = e.target.parentElement["id"].split("-")[2];
-                selectedDate = parseInt(weekth) * 7 + parseInt(selectedNum) - 1;
-                $("#selectedDate").text(getFutureDateInSpanish(selectedDate));
-                
-                var selectedSeatsNum = selectedDate * 8 + timeOrder($("#selectedTime").text());
+            // classes tapbar in second step
+            $(".am").on('click', function(e) {
+                // e.target["id"]
+                $(".am").removeClass("border-b-2 border-[#fbee21]");
+                $(e.target).addClass("border-b-2 border-[#fbee21]");
+                $("#selectedTime").html($(e.target).html());
+                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
                 selectedTimeSeats = seats[selectedSeatsNum];
                 fullSeatsCount = 0;
-                for(let i = 0; i < selectedTimeSeats.length; i++){
-                    if(selectedTimeSeats[i]=='Empty') 
-                        $("#seat-"+ i).html(`
+                for (let i = 0; i < selectedTimeSeats.length; i++) {
+                    if (selectedTimeSeats[i] == 'Empty')
+                        $("#seat-" + i).html(`
                                 <img width="50" height="50"
                                 src="{{asset('imgs/icons/40.png')}}"
                                 alt="logo"
                                 class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
                         `)
-                    else if(selectedTimeSeats[i]=='Full') {
-                        fullSeatsCount ++;
-                        $("#seat-"+ i).html(`
+                    else if (selectedTimeSeats[i] == 'Full') {
+                        fullSeatsCount++;
+                        $("#seat-" + i).html(`
                                 <img width="50" height="50"
                                 src="{{asset('imgs/icons/38.png')}}"
                                 alt="logo"
                                 class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
                         `)
-                    }
-                        
-                    else
-                        $("#seat-"+ i).html(`
+                    } else
+                        $("#seat-" + i).html(`
                                 <img width="50" height="50"
                                 src="{{asset('imgs/icons/39.png')}}"
                                 alt="logo"
@@ -785,15 +759,218 @@
                         virtid = 1;
                     }
                 });
-                if(fullSeatsCount == 0)
-                seatHtml += `
+                if (fullSeatsCount == 0)
+                    seatHtml += `
                     <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
                 `;
                 $("#seat-detail").html(seatHtml);
-                
-                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
-                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
+
+                $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
+                $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
             })
+            $(".pm").on('click', function(e) {
+                // e.target["id"]
+                $(".pm").removeClass("border-b-2 border-[#fbee21]");
+                $(e.target).addClass("border-b-2 border-[#fbee21]");
+                $("#selectedTime").html($(e.target).html());
+                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
+                selectedTimeSeats = seats[selectedSeatsNum];
+                fullSeatsCount = 0;
+                for (let i = 0; i < selectedTimeSeats.length; i++) {
+                    if (selectedTimeSeats[i] == 'Empty')
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/40.png')}}"
+                                alt="logo"
+                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    else if (selectedTimeSeats[i] == 'Full') {
+                        fullSeatsCount++;
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/38.png')}}"
+                                alt="logo"
+                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    } else
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/39.png')}}"
+                                alt="logo"
+                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                }
+                var virtid = 0;
+                var seatHtml = '';
+
+                selectedTimeSeats.forEach((item, id) => {
+                    if (item === "Full") {
+                        if (virtid === 1) {
+                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
+                        }
+                        seatHtml += `
+                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                            <div class='flex justify-between'>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                                    Adulto
+                                </div>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                            </div>
+                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
+                                <div>Eliminar</div>
+                            </div>
+                        </div>`;
+                        virtid = 1;
+                    }
+                });
+                if (fullSeatsCount == 0)
+                    seatHtml += `
+                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
+                `;
+                $("#seat-detail").html(seatHtml);
+
+                $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
+                $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
+            })
+            // select class time block in first step
+            $(".time-select-block").on('click', function(e) {
+
+                $(".time-select-block").removeClass("bg-[#c60384] text-white");
+                $(e.target).addClass("bg-[#c60384] text-white");
+                $("#selectedTime").html($(e.target).html());
+                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
+                selectedTimeSeats = seats[selectedSeatsNum];
+                fullSeatsCount = 0;
+                for (let i = 0; i < selectedTimeSeats.length; i++) {
+                    if (selectedTimeSeats[i] == 'Empty')
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/40.png')}}"
+                                alt="logo"
+                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    else if (selectedTimeSeats[i] == 'Full') {
+                        fullSeatsCount++;
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/38.png')}}"
+                                alt="logo"
+                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    } else
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/39.png')}}"
+                                alt="logo"
+                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                }
+                var virtid = 0;
+                var seatHtml = '';
+
+                selectedTimeSeats.forEach((item, id) => {
+                    if (item === "Full") {
+                        if (virtid === 1) {
+                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
+                        }
+                        seatHtml += `
+                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                            <div class='flex justify-between'>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                                    Adulto
+                                </div>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                            </div>
+                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
+                                <div>Eliminar</div>
+                            </div>
+                        </div>`;
+                        virtid = 1;
+                    }
+                });
+                if (fullSeatsCount == 0)
+                    seatHtml += `
+                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
+                `;
+                $("#seat-detail").html(seatHtml);
+
+                $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
+                $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
+            })
+            // select date in tap bar of first step
+            $(".select-day-block ").on('click', '.selected-day-block', function(e) {
+                $('.selected-day-block').removeClass("border-b-2 border-[#fbee21]");
+                $(e.target).parent(".selected-day-block").addClass("border-b-2 border-[#fbee21]");
+                var selectedNum = e.target.parentElement["id"].split("-")[2];
+                selectedDate = parseInt(weekth) * 7 + parseInt(selectedNum) - 1;
+                $("#selectedDate").text(getFutureDateInSpanish(selectedDate));
+
+                var selectedSeatsNum = selectedDate * 8 + timeOrder($("#selectedTime").text());
+                selectedTimeSeats = seats[selectedSeatsNum];
+                fullSeatsCount = 0;
+                for (let i = 0; i < selectedTimeSeats.length; i++) {
+                    if (selectedTimeSeats[i] == 'Empty')
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/40.png')}}"
+                                alt="logo"
+                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    else if (selectedTimeSeats[i] == 'Full') {
+                        fullSeatsCount++;
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/38.png')}}"
+                                alt="logo"
+                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    } else
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/39.png')}}"
+                                alt="logo"
+                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                }
+                var virtid = 0;
+                var seatHtml = '';
+
+                selectedTimeSeats.forEach((item, id) => {
+                    if (item === "Full") {
+                        if (virtid === 1) {
+                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
+                        }
+                        seatHtml += `
+                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                            <div class='flex justify-between'>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                                    Adulto
+                                </div>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                            </div>
+                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
+                                <div>Eliminar</div>
+                            </div>
+                        </div>`;
+                        virtid = 1;
+                    }
+                });
+                if (fullSeatsCount == 0)
+                    seatHtml += `
+                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
+                `;
+                $("#seat-detail").html(seatHtml);
+
+                $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
+                $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
+            })
+            // booking seats with clicking pictures and eliminars 
             $(".seats").on('click', function(e) {
                 var seatState = e.target.classList[0].split("-")[1];
                 var seatDirection = e.target.classList[1];
@@ -811,7 +988,7 @@
                         $(e.target).parent(".seats").html(
                             " <img width='50' height='50' src='{{asset('imgs/icons/38.png')}}' alt='logo' class='seat-Full cursor-pointer'>"
                         )
-                        selectedTimeSeats[seatid] = "Full";
+                    selectedTimeSeats[seatid] = "Full";
 
                     fullSeatsCount++;
                     hrid = seatid;
@@ -855,18 +1032,18 @@
                         virtid = 1;
                     }
                 });
-                if(fullSeatsCount == 0)
-                seatHtml += `
+                if (fullSeatsCount == 0)
+                    seatHtml += `
                     <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
                 `;
                 $("#seat-detail").html(seatHtml);
-                
-                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
-                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
+
+                $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
+                $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
             })
             $("#seat-detail").on('click', '.trash-btn', function(e) {
 
-                if(e.target.id) var deleteid = e.target.id.split('-')[1];
+                if (e.target.id) var deleteid = e.target.id.split('-')[1];
                 else var deleteid = e.target.parentElement.id.split('-')[1]; // Extract the index from the id
 
                 selectedTimeSeats[deleteid] = "Empty";
@@ -896,24 +1073,24 @@
                         virtid = 1;
                     }
                 });
-                if(fullSeatsCount == 0)
-                seatHtml += `
+                if (fullSeatsCount == 0)
+                    seatHtml += `
                     <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
                 `;
                 $("#seat-detail").html(seatHtml);
                 if (seatsDirection[deleteid] == "left")
-                    $("#seat-"+deleteid).html(
+                    $("#seat-" + deleteid).html(
                         " <img width='50' height='50' src='{{asset('imgs/icons/40.png')}}' alt='logo' class='seat-Empty transform scale-x-[-1] cursor-pointer'>"
                     )
                 else
-                    $("#seat-"+deleteid).html(
+                    $("#seat-" + deleteid).html(
                         " <img width='50' height='50' src='{{asset('imgs/icons/40.png')}}' alt='logo' class='seat-Empty cursor-pointer'>"
                     )
-                $("#full-seats-count").html("BICICLETA (" +fullSeatsCount+")");
-                $(".total-price").html("$ "+fullSeatsCount * 50+". °°");
-                
-            });
+                $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
+                $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
 
+            });
+            // continue and turnback button action
             $("#step-12").on('click', function(e) {
                 $('.step-1').removeClass("flex");
                 $('.step-1').addClass("hidden");
@@ -931,63 +1108,490 @@
                     $('#pm-block').addClass("flex");
                 }
             })
-            $("#step-23").on('click', function(e) {
-                $('.step-2').removeClass("flex");
-                $('.step-2').addClass("hidden");
-                $('.step-3').removeClass("hidden");
-                $('.step-3').addClass("flex");
-                $('step-u3').removeClass("flex");
-                $('step-u3').addClass("hidden");
-
-            })
             $("#step-21").on('click', function(e) {
                 $('.step-2').removeClass("flex");
                 $('.step-2').addClass("hidden");
                 $('.step-1').removeClass("hidden");
                 $('.step-1').addClass("flex");
             })
-            $("#step-32").on('click', function(e) {
-                $('.step-3').removeClass("flex");
-                $('.step-3').addClass("hidden");
-                $('.step-2').removeClass("hidden");
-                $('.step-2').addClass("flex");
+            $("#step-23").on('click', function(e) {
+                $('.step-2').removeClass("flex");
+                $('.step-2').addClass("hidden");
+                $('.step-3').removeClass("hidden");
+                $('.step-3').addClass("flex");
+                $('.step-u3').removeClass("flex");
+                $('.step-u3').addClass("hidden");
+                // console.log('{{route("api.sendSeat")}}')
+                // fetch('{{route("api.sendSeat")}}', {
+                //         method: "POST",
+                //         headers: {
+                //             'X-CSRF-TOKEN': '<?php echo csrf_token() ?>', // Include CSRF token for security
+                //             'Content-Type': "application/json",
+                //             'Accept': "application/json",
+                //             'Access-Control-Allow-Origin':"*",
+                //             'Access-Control-Allow-Methods':"POST"
+                //         },
+                //         body: JSON.stringify({
+                //             data: "asdfasdf"
+                //         })
+                //     }).then(res => res.json()) // Convert response to JSON if needed
+                //     .then(data => {
+                //         console.log(data);
+                //     })
+                //     .catch(err => {
+                //         console.error("Error:", err);
+                //     });
+                $.ajax({
+                    url: "{{route('api.sendSeat')}}",
+                    method: "POST",
+                    data: {
+                        selectedTimeSeats: selectedTimeSeats,
+                        totalprice: totalprice,
+                    },
+                    success: function(response) {
+                        // Handle success
+                        console.log(response);
+                        // alert(response);
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        // alert('An error occurred');
+                    }
+                })
             })
+
+            var nameValidState = false;
+            var lastnameValidState = false;
+            var phoneValidState = false;
+            var emailValidState = false;
+
+            var cardValidState = false;
+            var monthValidState = false;
+            var yearValidState = false;
+            var cvvValidState = false;
+
+            
+            var checkboxState = false;
+
+            // open and close detail profile input box with + and - button 
+            $(document).on('click', '#detail1, #detail1-reverse', function(e) {
+                var isDetail1 = $(this).attr('id') === 'detail1';
+                nameValidState = false;lastnameValidState = false;phoneValidState = false;emailValidState = false;
+                console.log('====================================');
+                console.log(isDetail1 ? 'detail1 clicked' : 'detail1-reverse clicked');
+                console.log('====================================');
+
+                if (isDetail1) {
+                    $(this).parent().append(`
+                        <img id="detail1-reverse" width="25" height="25" src="{{ asset('imgs/icons/44.png') }}" alt="seat" class="w-6 h-6 cursor-pointer">
+                    `);
+                    $('.profile-detail1').html(`
+                        <div class="flex flex-col w-full md:flex-row justify-between items-center gap-4 md:gap-8 text-[20px]">
+                            <div class="flex w-full md:flex-1 relative">
+                                <div class=" h-12 rounded-lg w-full relative">
+                                    <input type="text" id="name-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                        <div class="text-[#d9d9d9] text-[12px]">Nombre(s)</div>
+                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden name-valid">
+                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden name-invalid">
+                                    </div>
+                                    <div class="text-red-600 italic text-xs ml-4 hidden name-invalid">Debes ingresar caracteres alfabéticos.</div>
+                                </div>
+                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                            </div>
+                            <div class="flex w-full md:flex-1 relative">
+                                <div class=" h-12 rounded-lg w-full relative">
+                                    <input type="text" id="lastname-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                        <div class="text-[#d9d9d9] text-[12px]">Apellidos(s)</div>
+                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden lastname-valid">
+                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden lastname-invalid">
+                                    </div>
+                                    <div class="text-red-600 italic text-xs ml-4 hidden lastname-invalid">Debes ingresar caracteres alfabéticos.</div>
+                                </div>
+                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                            </div>
+                            <div class="flex w-full md:flex-1 relative">
+                                <div class=" h-12 rounded-lg w-full relative">
+                                    <input type="text" id="phone-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                        <div class="text-[#d9d9d9] text-[12px]">Teléfono</div>
+                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden phone-valid">
+                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden phone-invalid">
+                                    </div>
+                                    <div class="text-red-600 italic text-xs ml-4 hidden phone-invalid">El número de teléfono no es válido.</div>
+                                </div>
+                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                            </div>
+                        </div>
+                        <div class=" w-full relative">
+                            <div class=" h-12 rounded-lg w-full relative">
+                                <input type="text" id="email-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                    <div class="text-[#d9d9d9] text-[12px]">Correo electrónico</div>
+                                    <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden email-valid">
+                                    <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden email-invalid">
+                                </div>
+                                <div class="text-red-600 italic text-xs ml-4 hidden email-invalid">El correo electrónico no es válido.</div>
+                            </div>
+                            <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                        </div>
+                        <button class="profile-valid w-full bg-[#d9d9d9] h-12 rounded-lg text-[24px]" style="font-family: KommonExtraBold;">CONTINUAR</button>
+                    `);
+                } else {
+                    $(this).parent().append(`
+                        <img id="detail1" width="25" height="25" src="{{ asset('imgs/icons/43.png') }}" alt="seat" class="w-6 h-6 cursor-pointer">
+                    `);
+                    $('.profile-detail1').html('');
+                }
+
+                $(this).remove();
+            });
+            $(document).on('click', '#detail2, #detail2-reverse', function(e) {
+                var isDetail2 = $(this).attr('id') === 'detail2';
+                cardValidState = false;monthValidState = false;yearValidState = false;cvvValidState = false;checkboxState = false;
+                console.log('====================================');
+                console.log(isDetail2 ? 'detail2 clicked' : 'detail2-reverse clicked');
+                console.log('====================================');
+
+                if (isDetail2) {
+                    $(this).parent().append(`
+                        <img id="detail2-reverse" width="25" height="25" src="{{ asset('imgs/icons/44.png') }}" alt="seat" class="w-6 h-6 cursor-pointer">
+                    `);
+                    $('.profile-detail2').html(`
+                       <div class="flex w-full flex-col md:flex-row justify-between items-center gap-4 text-[20px]">
+                            <div class="flex w-full md:flex-[5] relative">
+                                <div class=" h-12 rounded-lg w-full relative">
+                                    <input type="text" id="card-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                        <div class="text-[#d9d9d9] text-[12px]">Número de tarjeta</div>
+                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden card-valid">
+                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden card-invalid">
+                                    </div>
+                                    <div class="text-red-600 italic text-xs ml-4 hidden card-invalid">Forma de pago no válida o no compatible.</div>
+                                </div>
+                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                            </div>
+
+                            <div class="flex w-full md:flex-1 relative md:min-w-28">
+                                <div class="custom-select-wrapper w-full">
+                                    <div class="custom-select-small custom-select-trigger text-[24px] font-bold text-[#c60384] rounded-lg pl-2 py-3 pr-12 bg-[#f6f3f3] cursor-pointer w-full ">
+                                        Mes
+                                    </div>
+                                    <div class="custom-options hidden text-[18px]">
+                                        <div class="custom-option month-field">Enero</div>
+                                        <div class="custom-option month-field">Febrero</div>
+                                        <div class="custom-option month-field">Marzo</div>
+                                        <div class="custom-option month-field">Abril</div>
+                                        <div class="custom-option month-field">Mayo</div>
+                                        <div class="custom-option month-field">Junio</div>
+                                        <div class="custom-option month-field">Julio</div>
+                                        <div class="custom-option month-field">Agosto</div>
+                                        <div class="custom-option month-field">Septiembre</div>
+                                        <div class="custom-option month-field">Octubre</div>
+                                        <div class="custom-option month-field">Noviembre</div>
+                                        <div class="custom-option month-field">Diciembre</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex w-full md:flex-1 relative md:min-w-28">
+                                <div class="custom-select-wrapper w-full">
+                                    <div class=" custom-select-small custom-select-trigger text-[24px] font-bold text-[#c60384] rounded-lg pl-2 py-3 pr-12 bg-[#f6f3f3] cursor-pointer w-full">
+                                        Año
+                                    </div>
+                                    <div class="custom-options hidden text-[18px]">
+                                        <div class="custom-option year-field">2029</div>
+                                        <div class="custom-option year-field">2028</div>
+                                        <div class="custom-option year-field">2027</div>
+                                        <div class="custom-option year-field">2026</div>
+                                        <div class="custom-option year-field">2025</div>
+                                        <div class="custom-option year-field">2024</div>
+                                        <div class="custom-option year-field">2023</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex w-full md:flex-1 relative">
+                                <div class=" h-12 rounded-lg w-full relative">
+                                    <input type="text" id="cvv-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
+                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
+                                        <div class="text-[#d9d9d9] text-[12px]">CVV</div>
+                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden cvv-valid">
+                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden cvv-invalid">
+                                    </div>
+                                    <div class="text-red-600 italic text-xs ml-4 hidden cvv-invalid">Forma de pago no válida o no compatible.</div>
+                                </div>
+                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
+                            </div>
+                        </div>
+                        <div class="w-full relative flex items-center gap-6">
+                            <div class="custom-checkbox min-w-10 max-h-10 min-h-10 checkbox"></div>
+                            <div class="text-red-600 text-[20px] checkbox cursor-pointer">Estoy de acuerdo con los Términos y condiciones, políticas de cancelación y de promoción así como los servicios que se muestran en el desglose de mi compra son los que solicito.</div>
+                        </div>
+                        <button class="pay-valid w-full bg-[#d9d9d9] h-12 rounded-lg text-[24px]" style="font-family: KommonExtraBold;">CONTINUAR</button>
+                    `);
+                } else {
+                    $(this).parent().append(`
+                        <img id="detail2" width="25" height="25" src="{{ asset('imgs/icons/43.png') }}" alt="seat" class="w-6 h-6 cursor-pointer">
+                    `);
+                    $('.profile-detail2').html('');
+                }
+
+                $(this).remove();
+            });
+            // clear the input with clicking X button
+            $(document).on('click', '.refresh-input', function() {
+                $(this).closest('div').find('input').val('');
+            });
+
+            // customize dropdown with scroll and icon in step3
+            $(document).on('click', '.custom-select-trigger', function() {
+                $(this).next(".custom-options").toggleClass("hidden");
+            });
+
+            $(document).on('click', '.custom-option', function() {
+                var selectedText = $(this).text().slice(0, 4);
+                $(this).closest(".custom-select-wrapper").find(".custom-select-trigger").text(selectedText);
+                $(this).parent().addClass("hidden");
+            });
+
+            $(document).on('click', function(event) {
+                if (!$(event.target).closest('.custom-select-wrapper').length) {
+                    $(".custom-options").addClass("hidden");
+                }
+            });
+
+
+            // validating inputs
+            
+
+            $(document).on("keyup","#name-field", function(e) {
+                var nameVal = $(e.target).val();
+                console.log(nameVal);
+                if (isSpanishEnglishAlphabetic(nameVal)) {
+                    nameValidState = true;
+                    $('.name-invalid').removeClass("flex");
+                    $('.name-invalid').addClass("hidden");
+                    $('.name-valid').removeClass("hidden");
+                    $('.name-valid').addClass("flex");
+                } else if (nameVal != '') {
+                    nameValidState = false;
+                    $('.name-valid').removeClass("flex");
+                    $('.name-valid').addClass("hidden");
+                    $('.name-invalid').removeClass("hidden");
+                    $('.name-invalid').addClass("flex");
+                } else {
+                    nameValidState = false;
+                    $('.name-valid').removeClass("flex");
+                    $('.name-valid').addClass("hidden");
+                    $('.name-invalid').removeClass("flex");
+                    $('.name-invalid').addClass("hidden");
+                }
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState) {
+                    $('.profile-valid').removeClass("bg-[#d9d9d9]");
+                    $('.profile-valid').addClass("bg-[#fbee21]");
+                } else {
+                    $('.profile-valid').removeClass("bg-[#fbee21]");
+                    $('.profile-valid').addClass("bg-[#d9d9d9]");
+                }
+            });
+
+            $(document).on("keyup","#lastname-field", function(e) {
+                var lastnameVal = $(e.target).val();
+                console.log(lastnameVal);
+                if (isSpanishEnglishAlphabetic(lastnameVal)) {
+                    lastnameValidState = true;
+                    $('.lastname-invalid').removeClass("flex");
+                    $('.lastname-invalid').addClass("hidden");
+                    $('.lastname-valid').removeClass("hidden");
+                    $('.lastname-valid').addClass("flex");
+                } else if (lastnameVal != '') {
+                    lastnameValidState = false;
+                    $('.lastname-valid').removeClass("flex");
+                    $('.lastname-valid').addClass("hidden");
+                    $('.lastname-invalid').removeClass("hidden");
+                    $('.lastname-invalid').addClass("flex");
+                } else {
+                    lastnameValidState = false;
+                    $('.lastname-valid').removeClass("flex");
+                    $('.lastname-valid').addClass("hidden");
+                    $('.lastname-invalid').removeClass("flex");
+                    $('.lastname-invalid').addClass("hidden");
+                }
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState) {
+                    $('.profile-valid').removeClass("bg-[#d9d9d9]");
+                    $('.profile-valid').addClass("bg-[#fbee21]");
+                } else {
+                    $('.profile-valid').removeClass("bg-[#fbee21]");
+                    $('.profile-valid').addClass("bg-[#d9d9d9]");
+                }
+            });
+            $(document).on("keyup","#phone-field", function(e) {
+                var phoneVal = $(e.target).val();
+                console.log(phoneVal);
+                if (isValidPhoneNumber(phoneVal)) {
+                    phoneValidState = true;
+                    $('.phone-invalid').removeClass("flex");
+                    $('.phone-invalid').addClass("hidden");
+                    $('.phone-valid').removeClass("hidden");
+                    $('.phone-valid').addClass("flex");
+                } else if (phoneVal != '') {
+                    phoneValidState = false;
+                    $('.phone-valid').removeClass("flex");
+                    $('.phone-valid').addClass("hidden");
+                    $('.phone-invalid').removeClass("hidden");
+                    $('.phone-invalid').addClass("flex");
+                } else {
+                    phoneValidState = false;
+                    $('.phone-valid').removeClass("flex");
+                    $('.phone-valid').addClass("hidden");
+                    $('.phone-invalid').removeClass("flex");
+                    $('.phone-invalid').addClass("hidden");
+                }
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState) {
+                    $('.profile-valid').removeClass("bg-[#d9d9d9]");
+                    $('.profile-valid').addClass("bg-[#fbee21]");
+                } else {
+                    $('.profile-valid').removeClass("bg-[#fbee21]");
+                    $('.profile-valid').addClass("bg-[#d9d9d9]");
+                }
+            });
+            $(document).on("keyup","#email-field", function(e) {
+                var emailVal = $(e.target).val();
+                console.log(emailVal);
+                if (isValidEmail(emailVal)) {
+                    emailValidState = true;
+                    $('.email-invalid').removeClass("flex");
+                    $('.email-invalid').addClass("hidden");
+                    $('.email-valid').removeClass("hidden");
+                    $('.email-valid').addClass("flex");
+                } else if (emailVal != '') {
+                    emailValidState = false;
+                    $('.email-valid').removeClass("flex");
+                    $('.email-valid').addClass("hidden");
+                    $('.email-invalid').removeClass("hidden");
+                    $('.email-invalid').addClass("flex");
+                } else {
+                    emailValidState = false;
+                    $('.email-valid').removeClass("flex");
+                    $('.email-valid').addClass("hidden");
+                    $('.email-invalid').removeClass("flex");
+                    $('.email-invalid').addClass("hidden");
+                }
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState) {
+                    $('.profile-valid').removeClass("bg-[#d9d9d9]");
+                    $('.profile-valid').addClass("bg-[#fbee21]");
+                } else {
+                    $('.profile-valid').removeClass("bg-[#fbee21]");
+                    $('.profile-valid').addClass("bg-[#d9d9d9]");
+                }
+            });
+
+
+            //customize checkbox with image
+            $(document).on('click', '.checkbox', function() {
+                checkboxState = !checkboxState;
+                $('.checkbox').toggleClass('checked');
+                if (checkboxState) {
+                    $('.checkbox').removeClass('text-red-600');
+                    $('.checkbox').addClass('text-black');
+                } else {
+                    $('.checkbox').removeClass('text-black');
+                    $('.checkbox').addClass('text-red-600');
+                }
+                if (cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
+                    $('.pay-valid').addClass("bg-[#fbee21]");
+                } else {
+                    $('.pay-valid').removeClass("bg-[#fbee21]");
+                    $('.pay-valid').addClass("bg-[#d9d9d9]");
+                }
+            });
+
+            $(document).on("keyup","#cvv-field", function(e) {
+                var cvvVal = $(e.target).val();
+                console.log(cvvVal);
+                if (isValidCVV(cvvVal)) {
+                    cvvValidState = true;
+                    $('.cvv-invalid').removeClass("flex");
+                    $('.cvv-invalid').addClass("hidden");
+                    $('.cvv-valid').removeClass("hidden");
+                    $('.cvv-valid').addClass("flex");
+                } else if (cvvVal != '') {
+                    cvvValidState = false;
+                    $('.cvv-valid').removeClass("flex");
+                    $('.cvv-valid').addClass("hidden");
+                    $('.cvv-invalid').removeClass("hidden");
+                    $('.cvv-invalid').addClass("flex");
+                } else {
+                    cvvValidState = false;
+                    $('.cvv-valid').removeClass("flex");
+                    $('.cvv-valid').addClass("hidden");
+                    $('.cvv-invalid').removeClass("flex");
+                    $('.cvv-invalid').addClass("hidden");
+                }
+                if (cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
+                    $('.pay-valid').addClass("bg-[#fbee21]");
+                } else {
+                    $('.pay-valid').removeClass("bg-[#fbee21]");
+                    $('.pay-valid').addClass("bg-[#d9d9d9]");
+                }
+            });
+            $(document).on("keyup","#card-field", function(e) {
+                var cardVal = $(e.target).val();
+                console.log(cardVal);
+                if (isValidCardNumber(cardVal)) {
+                    cardValidState = true;
+                    $('.card-invalid').removeClass("flex");
+                    $('.card-invalid').addClass("hidden");
+                    $('.card-valid').removeClass("hidden");
+                    $('.card-valid').addClass("flex");
+                } else if (cardVal != '') {
+                    cardValidState = false;
+                    $('.card-valid').removeClass("flex");
+                    $('.card-valid').addClass("hidden");
+                    $('.card-invalid').removeClass("hidden");
+                    $('.card-invalid').addClass("flex");
+                } else {
+                    cardValidState = false;
+                    $('.card-valid').removeClass("flex");
+                    $('.card-valid').addClass("hidden");
+                    $('.card-invalid').removeClass("flex");
+                    $('.card-invalid').addClass("hidden");
+                }
+                if (cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
+                    $('.pay-valid').addClass("bg-[#fbee21]");
+                } else {
+                    $('.pay-valid').removeClass("bg-[#fbee21]");
+                    $('.pay-valid').addClass("bg-[#d9d9d9]");
+                }
+            });
+            $(document).on("mouseup",".year-field", function(e) {
+                var yearVal = $(e.target).text();
+                console.log(yearVal);
+                yearValidState = true;
+                if (cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
+                    $('.pay-valid').addClass("bg-[#fbee21]");
+                } else {
+                    $('.pay-valid').removeClass("bg-[#fbee21]");
+                    $('.pay-valid').addClass("bg-[#d9d9d9]");
+                }
+            });
+            $(document).on("mouseup",".month-field", function(e) {
+                var monthVal = $(e.target).text();
+                console.log(monthVal);
+                monthValidState = true;
+                if (cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
+                    $('.pay-valid').addClass("bg-[#fbee21]");
+                } else {
+                    $('.pay-valid').removeClass("bg-[#fbee21]");
+                    $('.pay-valid').addClass("bg-[#d9d9d9]");
+                }
+            });
         })
-
-
-        // const getData = () => {
-        //     fetch("{{route('api.data')}}", {
-        //         method:"POST",
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'X-CSRF-TOKEN': '{{ csrf_token() }}', // Include CSRF token for security
-        //             'Accept':'application/json'
-        //         },
-        //         body: JSON.stringify({step:step})
-        //     }).then(res => res.json()).then(data => {
-        //         console.log(data)
-
-        //     })
-        //     // let aa = res.json();
-        //     // console.log(res)
-        // }
-        // $.ajax({
-        //     url : "",
-        //     method:"POST",//GET
-        //     dataType:"HTML",//JSON Blob base64,
-        //     success : function(data){
-        //         $("#temp").html(data);
-        //     }
-        // })
-        // $.ajax({
-        //     url : "",
-        //     method:"POST",//GET
-        //     dataType:"JSON",//JSON Blob base64,
-        //     success : function(data){
-        //         $("#gender").val(data.gender);
-        //         // var aa = $("#gender").val();
-        //     }
-        // })
     </script>
 </body>
 
