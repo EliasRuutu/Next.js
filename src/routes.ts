@@ -4,6 +4,7 @@
  */
 export const publicRoutes = [
     '/',
+    '/admin',
     '/api/payment',
     '/planes/just-class',
     '/planes/full-fit',
@@ -12,6 +13,7 @@ export const publicRoutes = [
     '/planes/semestral',
     '/planes/anual',
     '/reservar/spinning',
+    '/reservar/tobank',
     '/anualidad',
     '/privacy',
     '/terms-and-conditions',

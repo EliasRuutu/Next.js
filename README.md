@@ -22,7 +22,7 @@ Proyecto Next.js 14 con Autenticación
 7. npx prisma generate
 8. Crea otra Terminal y Ejecutar ```cd laravel-api```
 9. Ejecutar ```npm run dev```
-10. Crea otra Terminal y Ejecutar ```php artisan serve```
+10. Crea otra Terminal y Ejecutar ```php artisan serve --host=localhost --port=8000```
 
 
 ## Presentación
