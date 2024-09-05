@@ -14,7 +14,7 @@ export default auth((req): any => {
   const isOthersRoute = othersPrefix.some((prefix) => {
     return nextUrl.pathname.startsWith(prefix)
   });
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname) || nextUrl.pathname.includes("reservar/tobank");
 
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 

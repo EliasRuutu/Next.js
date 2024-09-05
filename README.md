@@ -14,15 +14,19 @@ Proyecto Next.js 14 con Autenticación
 - Shadcn UI
 
 ## Instalación
-1. Crear copia del archivo ```.env.example``` y asignar valores
+1. Crear copia del archivo ```.env.example```del proyecto next.js y laravel, y asignar valores
 2. Ejecutar ```npm install```
 3. Levantar la base de datos 
 4. Correr las migraciones ```npx prisma migrate dev```
 6. Ejecutar ```npm run dev```
 7. npx prisma generate
 8. Crea otra Terminal y Ejecutar ```cd laravel-api```
+9. Ejecutar ```npm install```
 9. Ejecutar ```npm run dev```
-10. Crea otra Terminal y Ejecutar ```php artisan serve```
+10. Crea otra Terminal y Ejecutar ```php artisan serve --host=localhost --port=8000```
+11. Crea otra Terminal y Ejecutar ```cd mailer```
+12. Ejecutar ```npm install```
+13. Ejecutar ```yarn dev```
 
 
 ## Presentación

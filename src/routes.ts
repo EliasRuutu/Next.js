@@ -4,6 +4,7 @@
  */
 export const publicRoutes = [
     '/',
+
     '/api/payment',
     '/planes/just-class',
     '/planes/full-fit',
@@ -12,16 +13,19 @@ export const publicRoutes = [
     '/planes/semestral',
     '/planes/anual',
     '/reservar/spinning',
+    '/reservar/tobank',
     '/anualidad',
     '/privacy',
     '/terms-and-conditions',
-    '/paymentconfirm'
+    '/paymentconfirm',
+    '/api/send-email',
 ]
 /**
  * Rutas de autenticación
  * @type {string[]}
  */
 export const authRoutes = [
+    '/admin',
     '/auth/login',
     '/auth/register',
     '/auth/error',

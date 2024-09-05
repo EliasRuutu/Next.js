@@ -13,13 +13,13 @@ export default async function Home() {
             <div className="leading-none outlined-text text-[50px] italic font-bold text-center">SELECCIONA TU</div>
             <div className="leading-none text-[#c60384] text-[64px] italic font-bold translate-y-[-16px] text-center">CLASE Y HORARIO</div>
           </div>
-          <Image width={300} height={300} src={cycle} alt="bg-class" className="absolute bottom-[-40%] right-[0vw] lg:right-[8vw]" />
+          <Image width={300} height={300} src={cycle} alt="bg-class" className="absolute bottom-[-40%] right-[0vw] lg:right-[8vw] pointer-events-none" />
         </div>
-        <div className="w-screen h-[1400px] lg:h-[900px]">
+        <div className="w-screen h-[1500px] lg:h-[900px]">
 
         <iframe 
-        src={`${process.env.NEXT_LARAVEL_Iframe_URL}/reservar/spinning`}
-        className="h-[1200px] lg:h-[100vh]"
+        src={`${process.env.NEXT_LARAVEL_Iframe_URL}/reservar/admin`}
+        className="h-[1500px] lg:h-[100vh]"
         style={{width: '100vw', border: 'none', position:'absolute', top:'300px'}}
         />
         </div>

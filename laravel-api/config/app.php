@@ -1,7 +1,8 @@
 <?php
 
 return [
-
+    
+    'parent_url' => env('Parent_URL', 'http://defaulturl.com'),
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -12,7 +13,6 @@ return [
     | other UI elements where an application name needs to be displayed.
     |
     */
-
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
@@ -122,5 +122,7 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+
 
 ];

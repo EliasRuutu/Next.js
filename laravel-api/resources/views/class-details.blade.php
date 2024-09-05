@@ -96,10 +96,10 @@
                     <div class="flex gap-4 items-center">
                         <img id="prev-btn" src="{{asset('imgs/icons/36.png')}}" alt="prev" class="w-8 h-8 rounded-full bg-[#c60384] flex justify-center items-center text-white cursor-pointer" />
                         <div class="flex border-b-2 border-[#dad9d8] overflow-x-auto w-[70vw] lg:w-[53vw] select-day-block">
-                            @for ($i = 1; $i <= 7; $i++)
+                            @for ($i = 0; $i < 7; $i++)
                                 <div id="selected-day-{{$i}}" class="selected-day-block cursor-pointer flex flex-col justify-center items-center text-[24px] w-36 min-w-36">
-                                <div class="font-bold">{{$getWeekdayInSpanish($getFutureDateInEnglish($weekth * 7 + $i - 1))}}</div>
-                                <div>{{$getDayAndMonthInSpanish($getFutureDateInEnglish($weekth * 7 + $i - 1))}}</div>
+                                <div class="font-bold">{{$getWeekdayInSpanish($getFutureDateInEnglish($weekth * 7 + $i))}}</div>
+                                <div>{{$getDayAndMonthInSpanish($getFutureDateInEnglish($weekth * 7 + $i))}}</div>
                         </div>
                         @endfor
                     </div>
@@ -121,32 +121,16 @@
             <div class="w-full   {{ $step == 2 ? 'flex' : 'hidden'}}    flex-col justify-start items-start mt-6 gap-5 step-2">
                 <div class="flex gap-4 items-center">
                     <div id="am-block" class="border-b-2 border-[#dad9d8] overflow-x-auto w-[70vw] lg:w-[53vw] flex">
-                        <div id="am1" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            7:00 - 8:00 AM
-                        </div>
-                        <div id="am2" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            8:00 - 9:00 AM
-                        </div>
-                        <div id="am3" class=" am font-bold  cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            9:00 - 10:00 AM
-                        </div>
-                        <div id="am4" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            10:00 - 11:00 AM
-                        </div>
+                        <div id="am1" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">7:00 - 8:00 AM</div>
+                        <div id="am2" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">8:00 - 9:00 AM</div>
+                        <div id="am3" class=" am font-bold  cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">9:00 - 10:00 AM</div>
+                        <div id="am4" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">10:00 - 11:00 AM</div>
                     </div>
                     <div id="pm-block" class="border-b-2 border-[#dad9d8] overflow-x-auto w-[70vw] lg:w-[53vw] flex">
-                        <div id="pm1" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            5:00 - 6:00 PM
-                        </div>
-                        <div id="pm2" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            6:00 - 7:00 PM
-                        </div>
-                        <div id="pm3" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            7:00 - 8:00 PM
-                        </div>
-                        <div id="pm4" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            8:00 - 9:00 PM
-                        </div>
+                        <div id="pm1" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">5:00 - 6:00 PM</div>
+                        <div id="pm2" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">6:00 - 7:00 PM</div>
+                        <div id="pm3" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">7:00 - 8:00 PM</div>
+                        <div id="pm4" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">8:00 - 9:00 PM</div>
                     </div>
                 </div>
                 <div class="flex gap-5 flex-wrap items-center">
@@ -271,7 +255,6 @@
                             </div>
                             <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
                         </div>
-                        <button class="profile-valid w-full bg-[#d9d9d9] h-12 rounded-lg text-[24px]" style="font-family: KommonExtraBold;">CONTINUAR</button>
                         @endif
                     </div>
                 </div>
@@ -483,7 +466,7 @@
                     CONTINUAR
                 </button>
                 <a
-                    href="javascript:gotoHome()"
+                    href="javascript:window.parent.location.href = '<?= $parentUrl ?>';"
                     style="font-family: KommonExtraBold;"
                     class=" {{ $step == 1 ? 'flex' : 'hidden'}} justify-center items-center text-[24px] font-bold bg-white rounded-md py-2 step-1">
                     VOLVER
@@ -526,9 +509,13 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        const gotoHome = () => {
-            window.parent.location.href = "<?= $homeUrl ?>";
-        }
+        // var parentUrl = <?= $parentUrl ?>;
+        // const gotoHome = () => {
+        //     console.log('====================================');
+        //     console.log("<?= $parentUrl ?>");
+        //     console.log('====================================');
+        //     // window.parent.location.href = parentUrl;
+        // }
 
         const getFutureDateInSpanish = (days) => {
             const today = new Date();
@@ -675,7 +662,7 @@
         var selectedTime = '<?= $selectedTime ?>';
         var selectedTimeSeats = seats[0];
         var seatsDirection = <?= @json_encode($seatsDirection) ?>;
-
+        var selectedSeatsNum = 0;
         $(document).ready(function() {
 
             // show 30 days in first step with violet buttons
@@ -684,8 +671,8 @@
                     weekth++;
 
                     $($(".select-day-block")[0]).html(
-                        [1, 2, 3, 4, 5, 6, 7].map((aa) => {
-                            return "<div id='selected-day-" + aa + "' class='selected-day-block cursor-pointer flex flex-col justify-center items-center text-[24px] w-36 min-w-36'><div class='font-bold'>" + getWeekdayInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div><div>" + getDayAndMonthInSpanish(getFutureDateInEnglish(weekth * 7 + aa - 1)) + "</div></div>";
+                        [0, 1, 2, 3, 4, 5, 6].map((aa) => {
+                            return "<div id='selected-day-" + aa + "' class='selected-day-block cursor-pointer flex flex-col justify-center items-center text-[24px] w-36 min-w-36'><div class='font-bold'>" + getWeekdayInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div><div>" + getDayAndMonthInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div></div>";
                         })
                     )
                 }
@@ -695,8 +682,8 @@
                     weekth--;
                     // e.target["id"]
                     $($(".select-day-block")[0]).html(
-                        [1, 2, 3, 4, 5, 6, 7].map((aa) => {
-                            return "<div id='selected-day-" + aa + "' class='selected-day-block cursor-pointer flex flex-col justify-center items-center text-[24px] w-36 min-w-36'><div class='font-bold'>" + getWeekdayInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div><div>" + getDayAndMonthInSpanish(getFutureDateInEnglish(weekth * 7 + aa - 1)) + "</div></div>";
+                        [0, 1, 2, 3, 4, 5, 6].map((aa) => {
+                            return "<div id='selected-day-" + aa + "' class='selected-day-block cursor-pointer flex flex-col justify-center items-center text-[24px] w-36 min-w-36'><div class='font-bold'>" + getWeekdayInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div><div>" + getDayAndMonthInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div></div>";
                         })
                     )
                 }
@@ -707,7 +694,7 @@
                 $(".am").removeClass("border-b-2 border-[#fbee21]");
                 $(e.target).addClass("border-b-2 border-[#fbee21]");
                 $("#selectedTime").html($(e.target).html());
-                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
+                selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text().trim());
                 selectedTimeSeats = seats[selectedSeatsNum];
                 fullSeatsCount = 0;
                 for (let i = 0; i < selectedTimeSeats.length; i++) {
@@ -767,13 +754,14 @@
 
                 $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
                 $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
+                totalprice = fullSeatsCount * 50;
             })
             $(".pm").on('click', function(e) {
                 // e.target["id"]
                 $(".pm").removeClass("border-b-2 border-[#fbee21]");
                 $(e.target).addClass("border-b-2 border-[#fbee21]");
                 $("#selectedTime").html($(e.target).html());
-                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
+                selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text().trim());
                 selectedTimeSeats = seats[selectedSeatsNum];
                 fullSeatsCount = 0;
                 for (let i = 0; i < selectedTimeSeats.length; i++) {
@@ -833,6 +821,7 @@
 
                 $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
                 $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
+                totalprice = fullSeatsCount * 50;
             })
             // select class time block in first step
             $(".time-select-block").on('click', function(e) {
@@ -840,7 +829,7 @@
                 $(".time-select-block").removeClass("bg-[#c60384] text-white");
                 $(e.target).addClass("bg-[#c60384] text-white");
                 $("#selectedTime").html($(e.target).html());
-                var selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
+                selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text().trim());
                 selectedTimeSeats = seats[selectedSeatsNum];
                 fullSeatsCount = 0;
                 for (let i = 0; i < selectedTimeSeats.length; i++) {
@@ -900,16 +889,17 @@
 
                 $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
                 $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
+                totalprice = fullSeatsCount * 50;
             })
             // select date in tap bar of first step
             $(".select-day-block ").on('click', '.selected-day-block', function(e) {
                 $('.selected-day-block').removeClass("border-b-2 border-[#fbee21]");
                 $(e.target).parent(".selected-day-block").addClass("border-b-2 border-[#fbee21]");
                 var selectedNum = e.target.parentElement["id"].split("-")[2];
-                selectedDate = parseInt(weekth) * 7 + parseInt(selectedNum) - 1;
+                selectedDate = parseInt(weekth) * 7 + parseInt(selectedNum);
                 $("#selectedDate").text(getFutureDateInSpanish(selectedDate));
 
-                var selectedSeatsNum = selectedDate * 8 + timeOrder($("#selectedTime").text());
+                selectedSeatsNum = selectedDate * 8 + timeOrder($("#selectedTime").text().trim());
                 selectedTimeSeats = seats[selectedSeatsNum];
                 fullSeatsCount = 0;
                 for (let i = 0; i < selectedTimeSeats.length; i++) {
@@ -969,6 +959,7 @@
 
                 $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
                 $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
+                totalprice = fullSeatsCount * 50;
             })
             // booking seats with clicking pictures and eliminars 
             $(".seats").on('click', function(e) {
@@ -1040,6 +1031,7 @@
 
                 $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
                 $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
+                totalprice = fullSeatsCount * 50;
             })
             $("#seat-detail").on('click', '.trash-btn', function(e) {
 
@@ -1088,6 +1080,7 @@
                     )
                 $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
                 $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
+                totalprice = fullSeatsCount * 50;
 
             });
             // continue and turnback button action
@@ -1141,23 +1134,7 @@
                 //     .catch(err => {
                 //         console.error("Error:", err);
                 //     });
-                $.ajax({
-                    url: "{{route('api.sendSeat')}}",
-                    method: "POST",
-                    data: {
-                        selectedTimeSeats: selectedTimeSeats,
-                        totalprice: totalprice,
-                    },
-                    success: function(response) {
-                        // Handle success
-                        console.log(response);
-                        // alert(response);
-                    },
-                    error: function(err) {
-                        console.log(err);
-                        // alert('An error occurred');
-                    }
-                })
+
             })
 
             var nameValidState = false;
@@ -1169,14 +1146,16 @@
             var monthValidState = false;
             var yearValidState = false;
             var cvvValidState = false;
-
-            
             var checkboxState = false;
 
+            var nameVal, lastnameVal, phoneVal, emailVal, cvvVal, cardVal, yearVal, monthVal;
             // open and close detail profile input box with + and - button 
             $(document).on('click', '#detail1, #detail1-reverse', function(e) {
                 var isDetail1 = $(this).attr('id') === 'detail1';
-                nameValidState = false;lastnameValidState = false;phoneValidState = false;emailValidState = false;
+                nameValidState = false;
+                lastnameValidState = false;
+                phoneValidState = false;
+                emailValidState = false;
                 console.log('====================================');
                 console.log(isDetail1 ? 'detail1 clicked' : 'detail1-reverse clicked');
                 console.log('====================================');
@@ -1236,7 +1215,6 @@
                             </div>
                             <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
                         </div>
-                        <button class="profile-valid w-full bg-[#d9d9d9] h-12 rounded-lg text-[24px]" style="font-family: KommonExtraBold;">CONTINUAR</button>
                     `);
                 } else {
                     $(this).parent().append(`
@@ -1249,7 +1227,11 @@
             });
             $(document).on('click', '#detail2, #detail2-reverse', function(e) {
                 var isDetail2 = $(this).attr('id') === 'detail2';
-                cardValidState = false;monthValidState = false;yearValidState = false;cvvValidState = false;checkboxState = false;
+                cardValidState = false;
+                monthValidState = false;
+                yearValidState = false;
+                cvvValidState = false;
+                checkboxState = false;
                 console.log('====================================');
                 console.log(isDetail2 ? 'detail2 clicked' : 'detail2-reverse clicked');
                 console.log('====================================');
@@ -1362,10 +1344,9 @@
 
 
             // validating inputs
-            
 
-            $(document).on("keyup","#name-field", function(e) {
-                var nameVal = $(e.target).val();
+            $(document).on("keyup", "#name-field", function(e) {
+                nameVal = $(e.target).val();
                 console.log(nameVal);
                 if (isSpanishEnglishAlphabetic(nameVal)) {
                     nameValidState = true;
@@ -1386,17 +1367,17 @@
                     $('.name-invalid').removeClass("flex");
                     $('.name-invalid').addClass("hidden");
                 }
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState) {
-                    $('.profile-valid').removeClass("bg-[#d9d9d9]");
-                    $('.profile-valid').addClass("bg-[#fbee21]");
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
+                    $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
-                    $('.profile-valid').removeClass("bg-[#fbee21]");
-                    $('.profile-valid').addClass("bg-[#d9d9d9]");
+                    $('.pay-valid').removeClass("bg-[#fbee21]");
+                    $('.pay-valid').addClass("bg-[#d9d9d9]");
                 }
             });
 
-            $(document).on("keyup","#lastname-field", function(e) {
-                var lastnameVal = $(e.target).val();
+            $(document).on("keyup", "#lastname-field", function(e) {
+                lastnameVal = $(e.target).val();
                 console.log(lastnameVal);
                 if (isSpanishEnglishAlphabetic(lastnameVal)) {
                     lastnameValidState = true;
@@ -1417,16 +1398,16 @@
                     $('.lastname-invalid').removeClass("flex");
                     $('.lastname-invalid').addClass("hidden");
                 }
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState) {
-                    $('.profile-valid').removeClass("bg-[#d9d9d9]");
-                    $('.profile-valid').addClass("bg-[#fbee21]");
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
+                    $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
-                    $('.profile-valid').removeClass("bg-[#fbee21]");
-                    $('.profile-valid').addClass("bg-[#d9d9d9]");
+                    $('.pay-valid').removeClass("bg-[#fbee21]");
+                    $('.pay-valid').addClass("bg-[#d9d9d9]");
                 }
             });
-            $(document).on("keyup","#phone-field", function(e) {
-                var phoneVal = $(e.target).val();
+            $(document).on("keyup", "#phone-field", function(e) {
+                phoneVal = $(e.target).val();
                 console.log(phoneVal);
                 if (isValidPhoneNumber(phoneVal)) {
                     phoneValidState = true;
@@ -1447,16 +1428,16 @@
                     $('.phone-invalid').removeClass("flex");
                     $('.phone-invalid').addClass("hidden");
                 }
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState) {
-                    $('.profile-valid').removeClass("bg-[#d9d9d9]");
-                    $('.profile-valid').addClass("bg-[#fbee21]");
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
+                    $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
-                    $('.profile-valid').removeClass("bg-[#fbee21]");
-                    $('.profile-valid').addClass("bg-[#d9d9d9]");
+                    $('.pay-valid').removeClass("bg-[#fbee21]");
+                    $('.pay-valid').addClass("bg-[#d9d9d9]");
                 }
             });
-            $(document).on("keyup","#email-field", function(e) {
-                var emailVal = $(e.target).val();
+            $(document).on("keyup", "#email-field", function(e) {
+                emailVal = $(e.target).val();
                 console.log(emailVal);
                 if (isValidEmail(emailVal)) {
                     emailValidState = true;
@@ -1477,12 +1458,12 @@
                     $('.email-invalid').removeClass("flex");
                     $('.email-invalid').addClass("hidden");
                 }
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState) {
-                    $('.profile-valid').removeClass("bg-[#d9d9d9]");
-                    $('.profile-valid').addClass("bg-[#fbee21]");
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
+                    $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
-                    $('.profile-valid').removeClass("bg-[#fbee21]");
-                    $('.profile-valid').addClass("bg-[#d9d9d9]");
+                    $('.pay-valid').removeClass("bg-[#fbee21]");
+                    $('.pay-valid').addClass("bg-[#d9d9d9]");
                 }
             });
 
@@ -1498,7 +1479,7 @@
                     $('.checkbox').removeClass('text-black');
                     $('.checkbox').addClass('text-red-600');
                 }
-                if (cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
                     $('.pay-valid').removeClass("bg-[#d9d9d9]");
                     $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
@@ -1507,8 +1488,8 @@
                 }
             });
 
-            $(document).on("keyup","#cvv-field", function(e) {
-                var cvvVal = $(e.target).val();
+            $(document).on("keyup", "#cvv-field", function(e) {
+                cvvVal = $(e.target).val();
                 console.log(cvvVal);
                 if (isValidCVV(cvvVal)) {
                     cvvValidState = true;
@@ -1529,7 +1510,7 @@
                     $('.cvv-invalid').removeClass("flex");
                     $('.cvv-invalid').addClass("hidden");
                 }
-                if (cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
                     $('.pay-valid').removeClass("bg-[#d9d9d9]");
                     $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
@@ -1537,8 +1518,8 @@
                     $('.pay-valid').addClass("bg-[#d9d9d9]");
                 }
             });
-            $(document).on("keyup","#card-field", function(e) {
-                var cardVal = $(e.target).val();
+            $(document).on("keyup", "#card-field", function(e) {
+                cardVal = $(e.target).val();
                 console.log(cardVal);
                 if (isValidCardNumber(cardVal)) {
                     cardValidState = true;
@@ -1559,7 +1540,7 @@
                     $('.card-invalid').removeClass("flex");
                     $('.card-invalid').addClass("hidden");
                 }
-                if (cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
                     $('.pay-valid').removeClass("bg-[#d9d9d9]");
                     $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
@@ -1567,11 +1548,11 @@
                     $('.pay-valid').addClass("bg-[#d9d9d9]");
                 }
             });
-            $(document).on("mouseup",".year-field", function(e) {
-                var yearVal = $(e.target).text();
+            $(document).on("mouseup", ".year-field", function(e) {
+                yearVal = $(e.target).text();
                 console.log(yearVal);
                 yearValidState = true;
-                if (cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
                     $('.pay-valid').removeClass("bg-[#d9d9d9]");
                     $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
@@ -1579,16 +1560,61 @@
                     $('.pay-valid').addClass("bg-[#d9d9d9]");
                 }
             });
-            $(document).on("mouseup",".month-field", function(e) {
-                var monthVal = $(e.target).text();
+            $(document).on("mouseup", ".month-field", function(e) {
+                monthVal = $(e.target).text();
                 console.log(monthVal);
                 monthValidState = true;
-                if (cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
                     $('.pay-valid').removeClass("bg-[#d9d9d9]");
                     $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
                     $('.pay-valid').removeClass("bg-[#fbee21]");
                     $('.pay-valid').addClass("bg-[#d9d9d9]");
+                }
+            });
+
+            //goto Bank Page
+            $(document).on("click", ".pay-valid", function(e) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                    var bookedSeatsNumsSend = ""
+                    for (let i = 0; i < 39; i++) {
+                        if (selectedTimeSeats[i] == "Full") {
+                            bookedSeatsNumsSend += ",";
+                            bookedSeatsNumsSend += (i + 1);
+                        }
+                    }
+
+
+                    $.ajax({
+                        url: "{{route('api.sendSeat')}}",
+                        method: "POST",
+                        data: {
+                            selectedTimeSeats: selectedTimeSeats,
+                            selectedSeatsNum: selectedSeatsNum,
+                            totalprice: totalprice,
+                            nameVal: nameVal,
+                            lastnameVal: lastnameVal,
+                            phoneVal: phoneVal,
+                            emailVal: emailVal,
+                        },
+                        success: function(response) {
+                            // Handle success
+                            console.log(response);
+                            if (response.success) {
+                                alert(response.success);
+                                window.parent.location.href = '<?= $parentUrl ?>/reservar/tobank/' + totalprice + '&' + nameVal + '&' + lastnameVal + '&' + emailVal + '&' + getFutureDateInSpanish(parseInt(selectedSeatsNum) / 8) + '&' + parseInt(selectedSeatsNum) % 8 + '&' + bookedSeatsNumsSend.slice(1, bookedSeatsNumsSend.length);
+                            };
+                            if (response.failed) {
+                                alert(response.failed);
+                                window.parent.location.href = '<?= $parentUrl ?>/reservar/spinning';
+                            }
+                        },
+                        error: function(err) {
+                            console.log(err);
+                            // alert('An error occurred');
+                        }
+                    })
+
                 }
             });
         })
