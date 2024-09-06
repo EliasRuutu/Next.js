@@ -4,7 +4,7 @@
  */
 export const publicRoutes = [
     '/',
-    '/admin',
+
     '/api/payment',
     '/planes/just-class',
     '/planes/full-fit',
@@ -25,6 +25,7 @@ export const publicRoutes = [
  * @type {string[]}
  */
 export const authRoutes = [
+    '/admin',
     '/auth/login',
     '/auth/register',
     '/auth/error',

@@ -116,7 +116,7 @@ const PaymentStatus = () => {
               console.log(classnumber);
               console.log('====================================');
               try {
-                const response = await fetch('http://88.99.90.19:5001/api/user/mailer', {
+                const response = await fetch(`${process.env.MAILER_SERVER}/api/user/mailer`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',

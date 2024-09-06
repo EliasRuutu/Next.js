@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
+const HOST = process.env.VITE_HOST
+
 export default defineConfig({
     plugins: [
         laravel({
@@ -9,9 +11,9 @@ export default defineConfig({
         }),
     ],
     server: {
-        host: '192.168.142.43',
+        host: HOST,
         hmr: {
-            host: '192.168.142.43'
+            host: HOST
         },
     },
 });
