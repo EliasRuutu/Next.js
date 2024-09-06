@@ -4,7 +4,6 @@
  */
 export const publicRoutes = [
     '/',
-
     '/api/payment',
     '/planes/just-class',
     '/planes/full-fit',
@@ -25,7 +24,7 @@ export const publicRoutes = [
  * @type {string[]}
  */
 export const authRoutes = [
-    '/admin',
+
     '/auth/login',
     '/auth/register',
     '/auth/error',
@@ -48,4 +47,4 @@ export const othersPrefix = [
  * Ruta de redirección por defecto
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = '/admin/home';
+export const DEFAULT_LOGIN_REDIRECT = '/admin';

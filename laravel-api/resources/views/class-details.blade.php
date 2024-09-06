@@ -69,6 +69,22 @@
             border: none;
             position: absolute;
         }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px;
+            background-color: #f44336;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .alert.show {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -82,12 +98,12 @@
                     <img src="{{asset('imgs/icons/35.png')}}" width="56" alt="seat">
                     <div class="relative ">
                         <select name="Classes" id="classes" class="custom-select w-[180px] text-[24px] rounded-lg pl-4 pr-12 py-3 bg-yellow-300 text-black cursor-pointer">
-                            <option value="spinning" class="bg-white hover:bg-yellow-300">Spinning</option>
-                            <option value="cycling" class="bg-white hover:bg-yellow-300">Cycling</option>
-                            <option value="yoga" class="bg-white hover:bg-yellow-300">Yoga</option>
-                            <option value="combat" class="bg-white hover:bg-yellow-300">Fit Combat</option>
-                            <option value="zumba" class="bg-white hover:bg-yellow-300">Zumba</option>
-                            <option value="pliates" class="bg-white hover:bg-yellow-300">Pliates</option>
+                            <option value="Spinning" class="bg-white hover:bg-yellow-300">Spinning</option>
+                            <option value="Cycling" class="bg-white hover:bg-yellow-300">Cycling</option>
+                            <option value="Yoga" class="bg-white hover:bg-yellow-300">Yoga</option>
+                            <option value="Fit Combat" class="bg-white hover:bg-yellow-300">Fit Combat</option>
+                            <option value="Zumba" class="bg-white hover:bg-yellow-300">Zumba</option>
+                            <option value="Pliates" class="bg-white hover:bg-yellow-300">Pliates</option>
                         </select>
                     </div>
                 </div>
@@ -258,94 +274,13 @@
                         @endif
                     </div>
                 </div>
-                <div class="w-full flex flex-col gap-4 ">
-                    <div class=" flex justify-between items-center">
-                        <div class="flex gap-4 items-center">
-                            <img width={25} height={25} src="{{asset('imgs/icons/42.png')}}" alt="seat" class="w-6 h-6">
-                            <div class="flex flex-col gap-0">
-                                <div class="text-[#dad9d8] text-[22px] font-bold" style="font-family: KommonExtraBold;">Paso 2</div>
-                                <div class="text-black text-[22px] font-bold" style="font-family: KommonExtraBold;">PAGAR</div>
-                            </div>
-                        </div>
-                        @if($profile2 == true)
-                        <img id="detail2-reverse" width={25} height={25} src="{{asset('imgs/icons/44.png')}}" alt="seat" class="w-6 h-6 cursor-pointer">
-                        @else
-                        <img id="detail2" width={25} height={25} src="{{asset('imgs/icons/43.png')}}" alt="seat" class="w-6 h-6 cursor-pointer">
-                        @endif
-                    </div>
-                    <hr class="bg-[#dad9d8] h-[6px] w-full" />
-                    <div class="w-full flex flex-col gap-4 profile-detail2">
-                        @if($profile2 == true)
-                        <div class="flex w-full flex-col md:flex-row justify-between items-center gap-4 text-[20px]">
-                            <div class="flex w-full md:flex-[5] relative">
-                                <div class=" h-12 rounded-lg w-full relative">
-                                    <input type="text" id="card-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
-                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
-                                        <div class="text-[#d9d9d9] text-[12px]">Número de tarjeta</div>
-                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden card-valid">
-                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden card-invalid">
-                                    </div>
-                                    <div class="text-red-600 italic text-xs ml-4 hidden card-invalid">Forma de pago no válida o no compatible.</div>
-                                </div>
-                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
-                            </div>
-
-                            <div class="flex w-full md:flex-1 relative md:min-w-28">
-                                <div class="custom-select-wrapper w-full">
-                                    <div class="custom-select-small custom-select-trigger text-[24px] font-bold text-[#c60384] rounded-lg pl-2 py-3 pr-12 bg-[#f6f3f3] cursor-pointer w-full ">
-                                        Mes
-                                    </div>
-                                    <div class="custom-options hidden text-[18px]">
-                                        <div class="custom-option month-field">Enero</div>
-                                        <div class="custom-option month-field">Febrero</div>
-                                        <div class="custom-option month-field">Marzo</div>
-                                        <div class="custom-option month-field">Abril</div>
-                                        <div class="custom-option month-field">Mayo</div>
-                                        <div class="custom-option month-field">Junio</div>
-                                        <div class="custom-option month-field">Julio</div>
-                                        <div class="custom-option month-field">Agosto</div>
-                                        <div class="custom-option month-field">Septiembre</div>
-                                        <div class="custom-option month-field">Octubre</div>
-                                        <div class="custom-option month-field">Noviembre</div>
-                                        <div class="custom-option month-field">Diciembre</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex w-full md:flex-1 relative md:min-w-28">
-                                <div class="custom-select-wrapper w-full">
-                                    <div class=" custom-select-small custom-select-trigger text-[24px] font-bold text-[#c60384] rounded-lg pl-2 py-3 pr-12 bg-[#f6f3f3] cursor-pointer w-full">
-                                        Año
-                                    </div>
-                                    <div class="custom-options hidden text-[18px]">
-                                        <div class="custom-option year-field">2029</div>
-                                        <div class="custom-option year-field">2028</div>
-                                        <div class="custom-option year-field">2027</div>
-                                        <div class="custom-option year-field">2026</div>
-                                        <div class="custom-option year-field">2025</div>
-                                        <div class="custom-option year-field">2024</div>
-                                        <div class="custom-option year-field">2023</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex w-full md:flex-1 relative">
-                                <div class=" h-12 rounded-lg w-full relative">
-                                    <input type="text" id="cvv-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
-                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
-                                        <div class="text-[#d9d9d9] text-[12px]">CVV</div>
-                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden cvv-valid">
-                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden cvv-invalid">
-                                    </div>
-                                    <div class="text-red-600 italic text-xs ml-4 hidden cvv-invalid">Forma de pago no válida o no compatible.</div>
-                                </div>
-                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
-                            </div>
-                        </div>
+                <div class="w-full flex flex-col gap-8 mt-5">
+                    <div class="w-full flex flex-col gap-8 profile-detail2">
                         <div class="w-full relative flex items-center gap-6">
                             <div class="custom-checkbox min-w-10 max-h-10 min-h-10 checkbox"></div>
                             <div class="text-red-600 text-[20px] checkbox cursor-pointer">Estoy de acuerdo con los Términos y condiciones, políticas de cancelación y de promoción así como los servicios que se muestran en el desglose de mi compra son los que solicito.</div>
                         </div>
                         <button class="pay-valid w-full bg-[#d9d9d9] h-12 rounded-lg text-[24px]" style="font-family: KommonExtraBold;">CONTINUAR</button>
-                        @endif
                     </div>
                 </div>
             </div>
@@ -381,6 +316,7 @@
                     CLASE
                 </div>
                 <div
+                    id="selectedClassName"
                     style="font-family: KommonSemiBold;"
                     class="text-[20px]">
                     Spinning
@@ -501,6 +437,8 @@
             </div>
         </div>
     </div>
+    <div id="custom-alert" class="alert">
+        This is a custom alert message.
     </div>
     <script lanugage="javascript">
         // Link to Home
@@ -516,19 +454,15 @@
         //     console.log('====================================');
         //     // window.parent.location.href = parentUrl;
         // }
-
-        const getFutureDateInSpanish = (days) => {
-            const today = new Date();
-            const futureDate = new Date(today);
-            futureDate.setDate(today.getDate() + days); // Add the input number of days
-
+        const getFutureDateInSpanish = (inputDate) => {
+            const date = new Date(inputDate);
             const options = {
                 month: 'long',
                 day: 'numeric',
                 weekday: 'long',
             };
 
-            return new Intl.DateTimeFormat('es-ES', options).format(futureDate);
+            return new Intl.DateTimeFormat('es-ES', options).format(date);
         };
         const getFutureDateInEnglish = (days) => {
             const today = new Date();
@@ -656,14 +590,95 @@
         var step = <?= $step ?>;
         var fullSeatsCount = <?= $fullSeatsCount ?>;
         var totalprice = <?= $totalprice ?>;
-        var hrid = <?= $hrid ?>;
         var seats = <?= @json_encode($seats) ?>;
+        var classFlags = <?= @json_encode($classFlags) ?>;
+        var seatsFromData = <?= @json_encode($seatsFromData) ?>;
+        var classType = <?= $classType ?>;
         var selectedDate = <?= $selectedDate ?>;
         var selectedTime = '<?= $selectedTime ?>';
         var selectedTimeSeats = seats[0];
         var seatsDirection = <?= @json_encode($seatsDirection) ?>;
         var selectedSeatsNum = 0;
+        var currentClassName = 'Spinning'
         $(document).ready(function() {
+
+            //Select Class Types
+            $('#classes').change(function() {
+                currentClassName = $(this).val();
+                classType = classFlags[currentClassName];
+                $('#selectedClassName').text(currentClassName);
+                for (let i = 0; i < 240; i++) {
+                    for (let j = 0; j < 39; j++)
+                        seats[i][j] = 'Empty';
+                }
+                console.log('====================================');
+                console.log(seatsFromData);
+                console.log('====================================');
+                for (let i = 0; i < seatsFromData.length; i++) {
+                    if (seatsFromData[i].gymClassName == currentClassName) {
+                        seats[seatsFromData[i].classIdNum][seatsFromData[i].seatNum] = seatsFromData[i].State;
+                    }
+                }
+                fullSeatsCount = 0;
+                for (let i = 0; i < selectedTimeSeats.length; i++) {
+                    if (selectedTimeSeats[i] == 'Empty')
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/40.png')}}"
+                                alt="logo"
+                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    else if (selectedTimeSeats[i] == 'Full') {
+                        fullSeatsCount++;
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/38.png')}}"
+                                alt="logo"
+                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    } else
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/39.png')}}"
+                                alt="logo"
+                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                }
+                var virtid = 0;
+                var seatHtml = '';
+
+                selectedTimeSeats.forEach((item, id) => {
+                    if (item === "Full") {
+                        if (virtid === 1) {
+                            seatHtml += `<hr id='seathr${id}' class='bg-[#dad9d8] h-[3px] w-full' />`;
+                        }
+                        seatHtml += `
+                        <div id='seatBlock${id}' class='w-full flex flex-col gap-3'>
+                            <div class='flex justify-between'>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'>
+                                    <img width="20" height="20" src="{{ asset('imgs/icons/38.png') }}" alt='seat' class='w-6 h-6'>
+                                    Adulto
+                                </div>
+                                <div style='font-family: KommonSemiBold;' class='text-[20px]'>$ 50.°°</div>
+                            </div>
+                            <div id='delete-${id}' style='font-family: KommonExtraBold;' class='trash-btn text-[20px] font-bold italic text-[#c60384] flex items-center cursor-pointer'>
+                                <img width="20" height="20" src="{{ asset('imgs/icons/45.png') }}" alt='seat' class=' w-5 h-5'>
+                                <div>Eliminar</div>
+                            </div>
+                        </div>`;
+                        virtid = 1;
+                    }
+                });
+                if (fullSeatsCount == 0)
+                    seatHtml += `
+                    <div id='seatisEmpty' style='font-family: KommonSemiBold;' class='text-[20px] flex gap-1 items-center'> <img width={20} height={20} src='{{asset('imgs/icons/38.png')}}' alt='seat' class='w-6 h-6'> No haz seleccionado tus lugares </div>
+                `;
+                $("#seat-detail").html(seatHtml);
+
+                $("#full-seats-count").html("BICICLETA (" + fullSeatsCount + ")");
+                $(".total-price").html("$ " + fullSeatsCount * 50 + ". °°");
+                totalprice = fullSeatsCount * 50;
+            });
 
             // show 30 days in first step with violet buttons
             $("#next-btn").on('click', function(e) {
@@ -825,7 +840,6 @@
             })
             // select class time block in first step
             $(".time-select-block").on('click', function(e) {
-
                 $(".time-select-block").removeClass("bg-[#c60384] text-white");
                 $(e.target).addClass("bg-[#c60384] text-white");
                 $("#selectedTime").html($(e.target).html());
@@ -897,7 +911,7 @@
                 $(e.target).parent(".selected-day-block").addClass("border-b-2 border-[#fbee21]");
                 var selectedNum = e.target.parentElement["id"].split("-")[2];
                 selectedDate = parseInt(weekth) * 7 + parseInt(selectedNum);
-                $("#selectedDate").text(getFutureDateInSpanish(selectedDate));
+                $("#selectedDate").text(getFutureDateInSpanish(getFutureDateInEnglish(selectedDate)));
 
                 selectedSeatsNum = selectedDate * 8 + timeOrder($("#selectedTime").text().trim());
                 selectedTimeSeats = seats[selectedSeatsNum];
@@ -971,18 +985,51 @@
                 console.log(seatDirection);
                 console.log('====================================');
                 if (seatState == "Empty") {
-                    if (seatDirection == "transform")
-                        $(e.target).parent(".seats").html(
-                            " <img width='50' height='50' src='{{asset('imgs/icons/38.png')}}' alt='logo' class='seat-Full transform scale-x-[-1] cursor-pointer'>"
-                        )
-                    else
-                        $(e.target).parent(".seats").html(
-                            " <img width='50' height='50' src='{{asset('imgs/icons/38.png')}}' alt='logo' class='seat-Full cursor-pointer'>"
-                        )
-                    selectedTimeSeats[seatid] = "Full";
+                    if (classType) {
+                        if (seatDirection == "transform")
+                            $(e.target).parent(".seats").html(
+                                " <img width='50' height='50' src='{{asset('imgs/icons/38.png')}}' alt='logo' class='seat-Full transform scale-x-[-1] cursor-pointer'>"
+                            )
+                        else
+                            $(e.target).parent(".seats").html(
+                                " <img width='50' height='50' src='{{asset('imgs/icons/38.png')}}' alt='logo' class='seat-Full cursor-pointer'>"
+                            )
+                        selectedTimeSeats[seatid] = "Full";
 
-                    fullSeatsCount++;
-                    hrid = seatid;
+                        fullSeatsCount++;
+                    } else {
+                        fullSeatsCount = 0;
+                        for (let i = 0; i < selectedTimeSeats.length; i++) {
+                            if (i == seatid) selectedTimeSeats[i] = "Full";
+                            else selectedTimeSeats[i] = "Empty";
+                        }
+                        for (let i = 0; i < selectedTimeSeats.length; i++) {
+                            if (selectedTimeSeats[i] == 'Empty')
+                                $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/40.png')}}"
+                                alt="logo"
+                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                                `)
+                            else if (selectedTimeSeats[i] == 'Full') {
+                                fullSeatsCount++;
+                                $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/38.png')}}"
+                                alt="logo"
+                                class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                                `)
+                            } else{
+                                $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/39.png')}}"
+                                alt="logo"
+                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                                `)
+                            }
+                        }
+
+                    }
 
                 } else if (seatState == "Full") {
                     if (seatDirection == "transform")
@@ -1225,101 +1272,7 @@
 
                 $(this).remove();
             });
-            $(document).on('click', '#detail2, #detail2-reverse', function(e) {
-                var isDetail2 = $(this).attr('id') === 'detail2';
-                cardValidState = false;
-                monthValidState = false;
-                yearValidState = false;
-                cvvValidState = false;
-                checkboxState = false;
-                console.log('====================================');
-                console.log(isDetail2 ? 'detail2 clicked' : 'detail2-reverse clicked');
-                console.log('====================================');
 
-                if (isDetail2) {
-                    $(this).parent().append(`
-                        <img id="detail2-reverse" width="25" height="25" src="{{ asset('imgs/icons/44.png') }}" alt="seat" class="w-6 h-6 cursor-pointer">
-                    `);
-                    $('.profile-detail2').html(`
-                       <div class="flex w-full flex-col md:flex-row justify-between items-center gap-4 text-[20px]">
-                            <div class="flex w-full md:flex-[5] relative">
-                                <div class=" h-12 rounded-lg w-full relative">
-                                    <input type="text" id="card-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
-                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
-                                        <div class="text-[#d9d9d9] text-[12px]">Número de tarjeta</div>
-                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden card-valid">
-                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden card-invalid">
-                                    </div>
-                                    <div class="text-red-600 italic text-xs ml-4 hidden card-invalid">Forma de pago no válida o no compatible.</div>
-                                </div>
-                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
-                            </div>
-
-                            <div class="flex w-full md:flex-1 relative md:min-w-28">
-                                <div class="custom-select-wrapper w-full">
-                                    <div class="custom-select-small custom-select-trigger text-[24px] font-bold text-[#c60384] rounded-lg pl-2 py-3 pr-12 bg-[#f6f3f3] cursor-pointer w-full ">
-                                        Mes
-                                    </div>
-                                    <div class="custom-options hidden text-[18px]">
-                                        <div class="custom-option month-field">Enero</div>
-                                        <div class="custom-option month-field">Febrero</div>
-                                        <div class="custom-option month-field">Marzo</div>
-                                        <div class="custom-option month-field">Abril</div>
-                                        <div class="custom-option month-field">Mayo</div>
-                                        <div class="custom-option month-field">Junio</div>
-                                        <div class="custom-option month-field">Julio</div>
-                                        <div class="custom-option month-field">Agosto</div>
-                                        <div class="custom-option month-field">Septiembre</div>
-                                        <div class="custom-option month-field">Octubre</div>
-                                        <div class="custom-option month-field">Noviembre</div>
-                                        <div class="custom-option month-field">Diciembre</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex w-full md:flex-1 relative md:min-w-28">
-                                <div class="custom-select-wrapper w-full">
-                                    <div class=" custom-select-small custom-select-trigger text-[24px] font-bold text-[#c60384] rounded-lg pl-2 py-3 pr-12 bg-[#f6f3f3] cursor-pointer w-full">
-                                        Año
-                                    </div>
-                                    <div class="custom-options hidden text-[18px]">
-                                        <div class="custom-option year-field">2029</div>
-                                        <div class="custom-option year-field">2028</div>
-                                        <div class="custom-option year-field">2027</div>
-                                        <div class="custom-option year-field">2026</div>
-                                        <div class="custom-option year-field">2025</div>
-                                        <div class="custom-option year-field">2024</div>
-                                        <div class="custom-option year-field">2023</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex w-full md:flex-1 relative">
-                                <div class=" h-12 rounded-lg w-full relative">
-                                    <input type="text" id="cvv-field" class=" h-full rounded-lg outline outline-[#dad9d8] px-4 w-full">
-                                    <div class="absolute top-[2px] left-2 flex gap-2 items-center">
-                                        <div class="text-[#d9d9d9] text-[12px]">CVV</div>
-                                        <img width={10} height={10} src="{{asset('imgs/icons/51.png')}}" alt="valid" class="w-3 h-3 cursor-pointer hidden cvv-valid">
-                                        <img width={10} height={10} src="{{asset('imgs/icons/47.png')}}" alt="invalid" class="w-3 h-3 cursor-pointer hidden cvv-invalid">
-                                    </div>
-                                    <div class="text-red-600 italic text-xs ml-4 hidden cvv-invalid">Forma de pago no válida o no compatible.</div>
-                                </div>
-                                <img width={25} height={25} src="{{asset('imgs/icons/48.png')}}" alt="clear" class="refresh-input w-6 h-6 absolute top-[50%] translate-y-[-50%] right-3">
-                            </div>
-                        </div>
-                        <div class="w-full relative flex items-center gap-6">
-                            <div class="custom-checkbox min-w-10 max-h-10 min-h-10 checkbox"></div>
-                            <div class="text-red-600 text-[20px] checkbox cursor-pointer">Estoy de acuerdo con los Términos y condiciones, políticas de cancelación y de promoción así como los servicios que se muestran en el desglose de mi compra son los que solicito.</div>
-                        </div>
-                        <button class="pay-valid w-full bg-[#d9d9d9] h-12 rounded-lg text-[24px]" style="font-family: KommonExtraBold;">CONTINUAR</button>
-                    `);
-                } else {
-                    $(this).parent().append(`
-                        <img id="detail2" width="25" height="25" src="{{ asset('imgs/icons/43.png') }}" alt="seat" class="w-6 h-6 cursor-pointer">
-                    `);
-                    $('.profile-detail2').html('');
-                }
-
-                $(this).remove();
-            });
             // clear the input with clicking X button
             $(document).on('click', '.refresh-input', function() {
                 $(this).closest('div').find('input').val('');
@@ -1367,7 +1320,7 @@
                     $('.name-invalid').removeClass("flex");
                     $('.name-invalid').addClass("hidden");
                 }
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && checkboxState) {
                     $('.pay-valid').removeClass("bg-[#d9d9d9]");
                     $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
@@ -1398,7 +1351,7 @@
                     $('.lastname-invalid').removeClass("flex");
                     $('.lastname-invalid').addClass("hidden");
                 }
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && checkboxState) {
                     $('.pay-valid').removeClass("bg-[#d9d9d9]");
                     $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
@@ -1428,7 +1381,7 @@
                     $('.phone-invalid').removeClass("flex");
                     $('.phone-invalid').addClass("hidden");
                 }
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && checkboxState) {
                     $('.pay-valid').removeClass("bg-[#d9d9d9]");
                     $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
@@ -1458,7 +1411,7 @@
                     $('.email-invalid').removeClass("flex");
                     $('.email-invalid').addClass("hidden");
                 }
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && checkboxState) {
                     $('.pay-valid').removeClass("bg-[#d9d9d9]");
                     $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
@@ -1479,92 +1432,7 @@
                     $('.checkbox').removeClass('text-black');
                     $('.checkbox').addClass('text-red-600');
                 }
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
-                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
-                    $('.pay-valid').addClass("bg-[#fbee21]");
-                } else {
-                    $('.pay-valid').removeClass("bg-[#fbee21]");
-                    $('.pay-valid').addClass("bg-[#d9d9d9]");
-                }
-            });
-
-            $(document).on("keyup", "#cvv-field", function(e) {
-                cvvVal = $(e.target).val();
-                console.log(cvvVal);
-                if (isValidCVV(cvvVal)) {
-                    cvvValidState = true;
-                    $('.cvv-invalid').removeClass("flex");
-                    $('.cvv-invalid').addClass("hidden");
-                    $('.cvv-valid').removeClass("hidden");
-                    $('.cvv-valid').addClass("flex");
-                } else if (cvvVal != '') {
-                    cvvValidState = false;
-                    $('.cvv-valid').removeClass("flex");
-                    $('.cvv-valid').addClass("hidden");
-                    $('.cvv-invalid').removeClass("hidden");
-                    $('.cvv-invalid').addClass("flex");
-                } else {
-                    cvvValidState = false;
-                    $('.cvv-valid').removeClass("flex");
-                    $('.cvv-valid').addClass("hidden");
-                    $('.cvv-invalid').removeClass("flex");
-                    $('.cvv-invalid').addClass("hidden");
-                }
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
-                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
-                    $('.pay-valid').addClass("bg-[#fbee21]");
-                } else {
-                    $('.pay-valid').removeClass("bg-[#fbee21]");
-                    $('.pay-valid').addClass("bg-[#d9d9d9]");
-                }
-            });
-            $(document).on("keyup", "#card-field", function(e) {
-                cardVal = $(e.target).val();
-                console.log(cardVal);
-                if (isValidCardNumber(cardVal)) {
-                    cardValidState = true;
-                    $('.card-invalid').removeClass("flex");
-                    $('.card-invalid').addClass("hidden");
-                    $('.card-valid').removeClass("hidden");
-                    $('.card-valid').addClass("flex");
-                } else if (cardVal != '') {
-                    cardValidState = false;
-                    $('.card-valid').removeClass("flex");
-                    $('.card-valid').addClass("hidden");
-                    $('.card-invalid').removeClass("hidden");
-                    $('.card-invalid').addClass("flex");
-                } else {
-                    cardValidState = false;
-                    $('.card-valid').removeClass("flex");
-                    $('.card-valid').addClass("hidden");
-                    $('.card-invalid').removeClass("flex");
-                    $('.card-invalid').addClass("hidden");
-                }
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
-                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
-                    $('.pay-valid').addClass("bg-[#fbee21]");
-                } else {
-                    $('.pay-valid').removeClass("bg-[#fbee21]");
-                    $('.pay-valid').addClass("bg-[#d9d9d9]");
-                }
-            });
-            $(document).on("mouseup", ".year-field", function(e) {
-                yearVal = $(e.target).text();
-                console.log(yearVal);
-                yearValidState = true;
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
-                    $('.pay-valid').removeClass("bg-[#d9d9d9]");
-                    $('.pay-valid').addClass("bg-[#fbee21]");
-                } else {
-                    $('.pay-valid').removeClass("bg-[#fbee21]");
-                    $('.pay-valid').addClass("bg-[#d9d9d9]");
-                }
-            });
-            $(document).on("mouseup", ".month-field", function(e) {
-                monthVal = $(e.target).text();
-                console.log(monthVal);
-                monthValidState = true;
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && checkboxState) {
                     $('.pay-valid').removeClass("bg-[#d9d9d9]");
                     $('.pay-valid').addClass("bg-[#fbee21]");
                 } else {
@@ -1575,7 +1443,7 @@
 
             //goto Bank Page
             $(document).on("click", ".pay-valid", function(e) {
-                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && cardValidState && monthValidState && yearValidState && cvvValidState && checkboxState) {
+                if (nameValidState && lastnameValidState && phoneValidState && emailValidState && checkboxState) {
                     var bookedSeatsNumsSend = ""
                     for (let i = 0; i < 39; i++) {
                         if (selectedTimeSeats[i] == "Full") {
@@ -1596,13 +1464,15 @@
                             lastnameVal: lastnameVal,
                             phoneVal: phoneVal,
                             emailVal: emailVal,
+                            currentClassName: currentClassName,
                         },
                         success: function(response) {
                             // Handle success
                             console.log(response);
+
                             if (response.success) {
                                 alert(response.success);
-                                window.parent.location.href = '<?= $parentUrl ?>/reservar/tobank/' + totalprice + '&' + nameVal + '&' + lastnameVal + '&' + emailVal + '&' + getFutureDateInSpanish(parseInt(selectedSeatsNum) / 8) + '&' + parseInt(selectedSeatsNum) % 8 + '&' + bookedSeatsNumsSend.slice(1, bookedSeatsNumsSend.length);
+                                window.parent.location.href = '<?= $parentUrl ?>/reservar/tobank/' + totalprice + '&' + nameVal + '&' + lastnameVal + '&' + emailVal + '&' + getFutureDateInSpanish(getFutureDateInEnglish(parseInt(selectedSeatsNum) / 8)) + '&' + parseInt(selectedSeatsNum) % 8 + '&' + bookedSeatsNumsSend.slice(1, bookedSeatsNumsSend.length);
                             };
                             if (response.failed) {
                                 alert(response.failed);

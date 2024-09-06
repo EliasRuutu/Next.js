@@ -6,25 +6,45 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\SeatModel;
 use App\Models\BookedModel;
+use App\Models\ClassModel;
 
 class ClassController extends Controller
 {
 
     public function show()
     {
-        $today = Carbon::today();
+        $today = Carbon::today()->format('Y-m-d');
         // Fetch class details based on $id 
         $seats = config('seats.list');
-        $specialSeatsFromData = SeatModel::all(['id', 'date', 'classNum', 'seatNum', 'State']);
+        $specialSeatsFromData = SeatModel::all(['id', 'gymClassName', 'date', 'classNum', 'seatNum', 'State']);
+        $classFlagsFromData = ClassModel::all(['id', 'gymClassName', 'flag']);
+        $seatsFromData[0]['gymClassName'] = 'Spinning';
+        $seatsFromData[0]['classIdNum'] = 0;
+        $seatsFromData[0]['seatNum'] = 0;
+        $seatsFromData[0]['State'] = 'Empty';
+        for ($i = 0; $i < count($classFlagsFromData); $i++) {
+            $classFlags[$classFlagsFromData[$i]['gymClassName']] = $classFlagsFromData[$i]['flag'];
+        }
+        $classType = 1;
         for ($i = 0; $i < 240; $i++) {
             for ($j = 0; $j < 39; $j++)
                 $seats[$i][$j] = 'Empty';
         }
+        $j=0;
         for ($i = 0; $i < count($specialSeatsFromData); $i++) {
-            if ($specialSeatsFromData[$i]['date'] > ($today->addDays(-1))) {
-                $today = Carbon::today();
-                $dateNum = intval($today->diffInDays($specialSeatsFromData[$i]['date'])) * 8 + intval($specialSeatsFromData[$i]['classNum']);
-                $seats[$dateNum][$specialSeatsFromData[$i]['seatNum']] = $specialSeatsFromData[$i]['State'];
+            $carbonToday = Carbon::parse($today);
+            $carbonDate = Carbon::parse($specialSeatsFromData[$i]['date']);
+
+            if ($carbonDate >= $carbonToday) {
+                $dateNum = intval($carbonToday->diffInDays($carbonDate)) * 8 + intval($specialSeatsFromData[$i]['classNum']);
+                $seatsFromData[$j]['gymClassName'] = $specialSeatsFromData[$i]['gymClassName'];
+                $seatsFromData[$j]['classIdNum'] = $dateNum;
+                $seatsFromData[$j]['seatNum'] = $specialSeatsFromData[$i]['seatNum'];
+                $seatsFromData[$j]['State'] = $specialSeatsFromData[$i]['State'];
+                $j ++;
+                if ($specialSeatsFromData[$i]['gymClassName'] == 'Spinning') {
+                    $seats[$dateNum][$specialSeatsFromData[$i]['seatNum']] = $specialSeatsFromData[$i]['State'];
+                }
             }
         }
 
@@ -63,6 +83,9 @@ class ClassController extends Controller
             'selectedNum',
             'step',
             'seats',
+            'classFlags',
+            'seatsFromData',
+            'classType',
             'firstseats',
             'seatsDirection',
             'profile',
@@ -109,7 +132,7 @@ class ClassController extends Controller
     public function saveSeat(Request $req)
     {
 
-        $today = Carbon::today();
+        $today = Carbon::today()->format('Y-m-d');
         $data = $req->all();
         $selectedTimeSeats = $data["selectedTimeSeats"];
         $selectedSeatsNum = $data["selectedSeatsNum"];
@@ -117,41 +140,48 @@ class ClassController extends Controller
         $lastnameVal = $data["lastnameVal"];
         $phoneVal = $data["phoneVal"];
         $emailVal = $data["emailVal"];
+        $currentClassName = $data["currentClassName"];
 
-        $specialSeatsFromData = SeatModel::all(['id', 'date', 'classNum', 'seatNum', 'State']);
+        $specialSeatsFromData = SeatModel::all(['id', 'gymClassName', 'date', 'classNum', 'seatNum', 'State']);
         for ($i = 0; $i < 240; $i++) {
             for ($j = 0; $j < 39; $j++)
                 $seats[$i][$j] = 'Empty';
         }
         for ($i = 0; $i < count($specialSeatsFromData); $i++) {
-            if ($specialSeatsFromData[$i]['date']  >= $today) {
-                $dateNum = intval($today->diffInDays($specialSeatsFromData[$i]['date'])) * 8 + intval($specialSeatsFromData[$i]['classNum']);
-                $seats[$dateNum][$specialSeatsFromData[$i]['seatNum']] = $specialSeatsFromData[$i]['State'];
+            $carbonToday = Carbon::parse($today);
+            $carbonDate = Carbon::parse($specialSeatsFromData[$i]['date']);
+
+            if ($carbonDate >= $carbonToday) {
+                $dateNum = intval($carbonToday->diffInDays($carbonDate)) * 8 + intval($specialSeatsFromData[$i]['classNum']);
+
+                if ($specialSeatsFromData[$i]['gymClassName'] == $currentClassName) {
+                    $seats[$dateNum][$specialSeatsFromData[$i]['seatNum']] = $specialSeatsFromData[$i]['State'];
+                }
             }
         }
         for ($i = 0; $i < 39; $i++) {
-            $today = Carbon::today();
+            $today = Carbon::today()->format('Y-m-d');
             if ($selectedTimeSeats[$i] == "Full") {
                 if ($seats[$selectedSeatsNum][$i] == "Disable" || $seats[$selectedSeatsNum][$i] == "Booked") {
                     // throw new \Exception("Seat $i for date that time is not available. Someone already booked or there is some issue for the seat.");
                     return response()->json(array("failed" => "Seat $i for date that time is not available. Someone already booked or there is some issue for the seat."));
                 } else {
-                    $today = Carbon::today();
                     $result = SeatModel::insert([
-                        'date' => $today->addDays(intval($selectedSeatsNum) / 8),
+                        'gymClassName' => $currentClassName,
+                        'date' => Carbon::today()->addDays(intval($selectedSeatsNum) / 8)->format('Y-m-d'),
                         'classNum' => intval($selectedSeatsNum) % 8,
                         'seatNum' => $i,
                         'State' => "Booked"
                     ]);
-                    $today = Carbon::today();
                     $result1 = BookedModel::insert([
                         'name' => $nameVal,
                         'lastname' => $lastnameVal,
                         'phone' => $phoneVal,
                         'email' => $emailVal,
-                        'date' => $today->addDays(intval($selectedSeatsNum) / 8),
+                        'date' => Carbon::today()->addDays(intval($selectedSeatsNum) / 8)->format('Y-m-d'),
                         'class' => intval($selectedSeatsNum) % 8,
                         'seatNumber' => $i,
+                        'gymClassName' => $currentClassName,
                     ]);
                 }
             }
