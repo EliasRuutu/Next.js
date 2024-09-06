@@ -9,8 +9,17 @@ interface Props {
 }
 export default async function Home({ params }: Props) {
   const { price } = params;
+  const infos = price.split('%26');
+  const totalprice = infos[0];
+  const name = infos[1] + " " + infos[2];
+  const email = infos[3].replaceAll('%40', '@');
+  const date = infos[4].replaceAll('%20',' ').replaceAll('%2C',',');
+  const classNum = parseInt(infos[5]) + 1;
+  const seatsList = infos[6].replaceAll('%2C',',');
+
   console.log("====================================");
-  console.log(price);
+  console.log(infos);
+  console.log(date);
   console.log("====================================");
 
   const idTransaccion = uuidv4();
@@ -21,7 +30,7 @@ export default async function Home({ params }: Props) {
     const path = "/v1/checkouts";
     const data = querystring.stringify({
       entityId: process.env.NEXT_PUBLIC_ENTITYID,
-      amount: parseInt(price).toFixed(2),
+      amount: parseInt(totalprice).toFixed(2),
       currency: "MXN",
       paymentType: "DB",
       //'testMode': 'EXTERNAL',
@@ -65,8 +74,13 @@ export default async function Home({ params }: Props) {
   useEffect(() => {
     request()
       .then((e: any) => {
+        const info = {
+          ID: e["id"],
+          bookclassinfos: price,
+        };
+        const queryString = new URLSearchParams(info).toString();
         router.push(
-          `${process.env.NEXT_PUBLIC_APP_URL}/paymentconfirm?ID=${e["id"]}`
+          `${process.env.NEXT_PUBLIC_APP_URL}/paymentconfirm?${queryString}`
         );
       })
       .catch(console.error);

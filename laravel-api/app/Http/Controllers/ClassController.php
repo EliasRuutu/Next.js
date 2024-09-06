@@ -21,7 +21,8 @@ class ClassController extends Controller
                 $seats[$i][$j] = 'Empty';
         }
         for ($i = 0; $i < count($specialSeatsFromData); $i++) {
-            if ($specialSeatsFromData[$i]['date']  >= $today) {
+            if ($specialSeatsFromData[$i]['date'] > ($today->addDays(-1))) {
+                $today = Carbon::today();
                 $dateNum = intval($today->diffInDays($specialSeatsFromData[$i]['date'])) * 8 + intval($specialSeatsFromData[$i]['classNum']);
                 $seats[$dateNum][$specialSeatsFromData[$i]['seatNum']] = $specialSeatsFromData[$i]['State'];
             }
@@ -55,7 +56,6 @@ class ClassController extends Controller
         $profile = true;
         $profile2 = true;
         return view('class-details', compact(
-
             'today',
             'selectedDate',
             'selectedTime',
@@ -153,15 +153,6 @@ class ClassController extends Controller
                         'class' => intval($selectedSeatsNum) % 8,
                         'seatNumber' => $i,
                     ]);
-                    // print_r([
-                    //         'name' => $nameVal,
-                    //         'lastname' => $lastnameVal,
-                    //         'phone' => $phoneVal,
-                    //         'email' => $emailVal,
-                    //         'date' => $today->addDays(intval($selectedSeatsNum) / 8),
-                    //         'class' => intval($selectedSeatsNum) % 8,
-                    //         'seatNumber' => $i,
-                    //     ]);
                 }
             }
         }

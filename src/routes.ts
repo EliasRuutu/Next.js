@@ -17,7 +17,8 @@ export const publicRoutes = [
     '/anualidad',
     '/privacy',
     '/terms-and-conditions',
-    '/paymentconfirm'
+    '/paymentconfirm',
+    '/api/send-email',
 ]
 /**
  * Rutas de autenticación

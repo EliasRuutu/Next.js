@@ -121,32 +121,16 @@
             <div class="w-full   {{ $step == 2 ? 'flex' : 'hidden'}}    flex-col justify-start items-start mt-6 gap-5 step-2">
                 <div class="flex gap-4 items-center">
                     <div id="am-block" class="border-b-2 border-[#dad9d8] overflow-x-auto w-[70vw] lg:w-[53vw] flex">
-                        <div id="am1" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            7:00 - 8:00 AM
-                        </div>
-                        <div id="am2" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            8:00 - 9:00 AM
-                        </div>
-                        <div id="am3" class=" am font-bold  cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            9:00 - 10:00 AM
-                        </div>
-                        <div id="am4" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            10:00 - 11:00 AM
-                        </div>
+                        <div id="am1" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">7:00 - 8:00 AM</div>
+                        <div id="am2" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">8:00 - 9:00 AM</div>
+                        <div id="am3" class=" am font-bold  cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">9:00 - 10:00 AM</div>
+                        <div id="am4" class=" am font-bold cursor-pointer flex flex-col justify-center items-center text-[24px] py-2 w-56 min-w-56">10:00 - 11:00 AM</div>
                     </div>
                     <div id="pm-block" class="border-b-2 border-[#dad9d8] overflow-x-auto w-[70vw] lg:w-[53vw] flex">
-                        <div id="pm1" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            5:00 - 6:00 PM
-                        </div>
-                        <div id="pm2" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            6:00 - 7:00 PM
-                        </div>
-                        <div id="pm3" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            7:00 - 8:00 PM
-                        </div>
-                        <div id="pm4" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">
-                            8:00 - 9:00 PM
-                        </div>
+                        <div id="pm1" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">5:00 - 6:00 PM</div>
+                        <div id="pm2" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">6:00 - 7:00 PM</div>
+                        <div id="pm3" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">7:00 - 8:00 PM</div>
+                        <div id="pm4" class=" pm cursor-pointer flex flex-col font-bold justify-center items-center text-[24px] py-2 w-56 min-w-56">8:00 - 9:00 PM</div>
                     </div>
                 </div>
                 <div class="flex gap-5 flex-wrap items-center">
@@ -434,7 +418,7 @@
                 $(".am").removeClass("border-b-2 border-[#fbee21]");
                 $(e.target).addClass("border-b-2 border-[#fbee21]");
                 $("#selectedTime").html($(e.target).html());
-                selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
+                selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text().trim());
                 selectedTime = $(e.target).text();
                 selectedTimeSeats = seats[selectedSeatsNum];
 
@@ -469,7 +453,7 @@
                 $(".pm").removeClass("border-b-2 border-[#fbee21]");
                 $(e.target).addClass("border-b-2 border-[#fbee21]");
                 $("#selectedTime").html($(e.target).html());
-                selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
+                selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text().trim());
                 selectedTime = $(e.target).text();
                 selectedTimeSeats = seats[selectedSeatsNum];
                 fullSeatsCount = 0;
@@ -505,7 +489,7 @@
                 $(".time-select-block").removeClass("bg-[#c60384] text-white");
                 $(e.target).addClass("bg-[#c60384] text-white");
                 $("#selectedTime").html($(e.target).html());
-                selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text());
+                selectedSeatsNum = selectedDate * 8 + timeOrder($(e.target).text().trim());
                 selectedTime = $(e.target).text();
                 selectedTimeSeats = seats[selectedSeatsNum];
                 fullSeatsCount = 0;
@@ -543,7 +527,7 @@
                 selectedDate = parseInt(weekth) * 7 + parseInt(selectedNum) - 1;
                 $("#selectedDate").text(getFutureDateInSpanish(selectedDate + 1));
 
-                selectedSeatsNum = selectedDate * 8 + timeOrder($("#selectedTime").text());
+                selectedSeatsNum = selectedDate * 8 + timeOrder($("#selectedTime").text().trim());
                 selectedTimeSeats = seats[selectedSeatsNum];
                 fullSeatsCount = 0;
                 for (let i = 0; i < selectedTimeSeats.length; i++) {
