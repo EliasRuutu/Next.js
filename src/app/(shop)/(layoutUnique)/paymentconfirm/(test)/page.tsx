@@ -97,9 +97,7 @@ const PaymentStatus = () => {
               const totalprice = infos[0];
               const name = `${infos[1]} ${infos[2]}`;
               const email = infos[3].replaceAll("%40", "@");
-              const date = infos[4]
-                .replaceAll("%20", " ")
-                .replaceAll("%2C", ",");
+              const date = decodeURIComponent(infos[4]);
               const classNum = parseInt(infos[5]);
               const seatsList = infos[6].replaceAll("%2C", ",");
               console.log("====================================");
@@ -110,35 +108,47 @@ const PaymentStatus = () => {
               console.log(classNum);
               console.log(seatsList);
               console.log("====================================");
-              const classList = ['7:00 - 8:00 AM','8:00 - 9:00 AM','9:00 - 10:00 AM','10:00 - 11:00 AM','5:00 - 6:00 PM','6:00 - 7:00 PM','7:00 - 8:00 PM','8:00 - 9:00 PM']
+              const classList = [
+                "7:00 - 8:00 AM",
+                "8:00 - 9:00 AM",
+                "9:00 - 10:00 AM",
+                "10:00 - 11:00 AM",
+                "5:00 - 6:00 PM",
+                "6:00 - 7:00 PM",
+                "7:00 - 8:00 PM",
+                "8:00 - 9:00 PM",
+              ];
               const classnumber = classList[classNum];
-              console.log('====================================');
+              console.log("====================================");
               console.log(classnumber);
-              console.log('====================================');
+              console.log("====================================");
               try {
-                const response = await fetch(`${process.env.MAILER_SERVER}/api/user/mailer`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    "Access-Control-Allow-Origin": "*"
-                  },
-                  body: JSON.stringify({
-                    to: email,
-                    date: date,
-                    classNum:classList[classNum],
-                    seatsList:seatsList,
-                    // txt: `Dear ${name},\n\nYour booking for ${date} has been confirmed. Thank you for choosing our service.\n\nBest regards,\nYour Company`,
-                  }),
-                });
+                const response = await fetch(
+                  `${process.env.NEXT_PUBLIC_MAILER_SERVER}/api/user/mailer`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      "Access-Control-Allow-Origin": "*",
+                    },
+                    body: JSON.stringify({
+                      to: email,
+                      date: date,
+                      classNum: classList[classNum],
+                      seatsList: seatsList,
+                      // txt: `Dear ${name},\n\nYour booking for ${date} has been confirmed. Thank you for choosing our service.\n\nBest regards,\nYour Company`,
+                    }),
+                  }
+                );
 
                 if (response.ok) {
-                  alert('Email sent successfully!');
+                  alert("Email sent successfully!");
                 } else {
-                  throw new Error('Failed to send email');
+                  throw new Error("Failed to send email");
                 }
               } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to send email. Please try again.');
+                console.error("Error:", error);
+                alert("Failed to send email. Please try again.");
               }
             }
           });

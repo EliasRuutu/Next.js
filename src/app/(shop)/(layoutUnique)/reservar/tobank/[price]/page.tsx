@@ -13,7 +13,7 @@ export default async function Home({ params }: Props) {
   const totalprice = infos[0];
   const name = infos[1] + " " + infos[2];
   const email = infos[3].replaceAll('%40', '@');
-  const date = infos[4].replaceAll('%20',' ').replaceAll('%2C',',');
+  const date = decodeURIComponent(infos[4]);
   const classNum = parseInt(infos[5]) + 1;
   const seatsList = infos[6].replaceAll('%2C',',');
 
