@@ -18,7 +18,7 @@ export default async function Home() {
         <div className="w-screen h-[1500px] lg:h-[900px]">
 
         <iframe 
-        src={`${process.env.NEXT_LARAVEL_Iframe_URL}/reservar/admin`}
+        src={`${process.env.NEXT_PUBLIC_LARAVEL_Iframe_URL}/reservar/admin`}
         className="h-[1500px] lg:h-[100vh]"
         style={{width: '100vw', border: 'none', position:'absolute', top:'300px'}}
         />

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use DateTime;
+use Exception;
+
 use App\Models\SeatModel;
 use App\Models\BookedModel;
 use App\Models\ClassModel;
@@ -187,6 +190,67 @@ class ClassController extends Controller
             }
         }
         return response()->json(array("success" => "Thank you. Seats are all booked successfully"));
+    }
+
+    public function deleteBook(Request $request)
+    {
+        $allParams = $request->query();
+        // $data = $req->all();
+        $date = $allParams["date"];
+        $classNum = $allParams["classNum"];
+        $seatsList = $allParams["seatsList"];
+        $gymClassName = $allParams["gymClassName"];
+        $seats = explode(",", $seatsList);
+
+        $spanishMonths = [
+            'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+            'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+        ];
+
+        // Remove the day name if present
+        $spanishDate = preg_replace('/^[a-záéíóúñ]+ /i', '', $date);
+
+        // Extract day and month
+        preg_match('/(\d+) de ([a-záéíóúñ]+)/i', $spanishDate, $matches);
+        $day = $matches[1];
+        $month = array_search(strtolower($matches[2]), $spanishMonths) + 1;
+
+        // Get current date
+        $currentDate = new DateTime();
+        $currentYear = (int)$currentDate->format('Y');
+        $currentMonth = (int)$currentDate->format('m');
+
+        // Determine the year
+        $year = $currentYear;
+        if ($currentMonth == 12 && $month < $currentMonth) {
+            $year++;
+        }
+
+        // Create date string
+        $dateString = sprintf('%04d-%02d-%02d', $year, $month, $day + 1);
+
+        // Validate date
+        $date = DateTime::createFromFormat('Y-m-d', $dateString);
+        if (!$date || $date->format('Y-m-d') !== $dateString) {
+            throw new Exception("Invalid date");
+        }
+
+        foreach ($seats as $seatNum) {
+            SeatModel::where('date', $dateString)
+                     ->where('classNum', $classNum)
+                     ->where('seatNum', intval($seatNum)-1)
+                     ->where('gymClassName', $gymClassName)
+                     ->delete();
+        }
+        foreach ($seats as $seatNum) {
+            BookedModel::where('date', $dateString)
+                     ->where('class', $classNum)
+                     ->where('seatNumber', intval($seatNum)-1)
+                     ->where('gymClassName', $gymClassName)
+                     ->delete();
+        }
+
+        return response()->json(array('aa'=>$seatsList));
     }
     private function getFutureDateInSpanish($days)
     {
