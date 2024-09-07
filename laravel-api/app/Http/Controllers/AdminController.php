@@ -13,7 +13,7 @@ class AdminController extends Controller
 
     public function adminshow()
     {
-        $today = Carbon::today();
+        $today = Carbon::today()->format('Y-m-d');
         // Fetch class details based on $id 
         $seats = config('seats.list');
         $specialSeatsFromData = SeatModel::all(['id', 'gymClassName', 'date', 'classNum', 'seatNum', 'State']);
