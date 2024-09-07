@@ -82,12 +82,12 @@
                     <img src="{{asset('imgs/icons/35.png')}}" width="56" alt="seat">
                     <div class="relative ">
                         <select name="Classes" id="classes" class="custom-select w-[180px] text-[24px] rounded-lg pl-4 pr-12 py-3 bg-yellow-300 text-black cursor-pointer">
-                            <option value="spinning" class="bg-white hover:bg-yellow-300">Spinning</option>
-                            <option value="cycling" class="bg-white hover:bg-yellow-300">Cycling</option>
-                            <option value="yoga" class="bg-white hover:bg-yellow-300">Yoga</option>
-                            <option value="combat" class="bg-white hover:bg-yellow-300">Fit Combat</option>
-                            <option value="zumba" class="bg-white hover:bg-yellow-300">Zumba</option>
-                            <option value="pliates" class="bg-white hover:bg-yellow-300">Pliates</option>
+                            <option value="Spinning" class="bg-white hover:bg-yellow-300">Spinning</option>
+                            <option value="Cycling" class="bg-white hover:bg-yellow-300">Cycling</option>
+                            <option value="Yoga" class="bg-white hover:bg-yellow-300">Yoga</option>
+                            <option value="Fit Combat" class="bg-white hover:bg-yellow-300">Fit Combat</option>
+                            <option value="Zumba" class="bg-white hover:bg-yellow-300">Zumba</option>
+                            <option value="Pliates" class="bg-white hover:bg-yellow-300">Pliates</option>
                         </select>
                     </div>
                 </div>
@@ -96,10 +96,10 @@
                     <div class="flex gap-4 items-center">
                         <img id="prev-btn" src="{{asset('imgs/icons/36.png')}}" alt="prev" class="w-8 h-8 rounded-full bg-[#c60384] flex justify-center items-center text-white cursor-pointer" />
                         <div class="flex border-b-2 border-[#dad9d8] overflow-x-auto w-[70vw] lg:w-[53vw] select-day-block">
-                            @for ($i = 1; $i <= 7; $i++)
+                            @for ($i = 0; $i < 7; $i++)
                                 <div id="selected-day-{{$i}}" class="selected-day-block cursor-pointer flex flex-col justify-center items-center text-[24px] w-36 min-w-36">
-                                <div class="font-bold">{{$getWeekdayInSpanish($getFutureDateInEnglish($weekth * 7 + $i - 1))}}</div>
-                                <div>{{$getDayAndMonthInSpanish($getFutureDateInEnglish($weekth * 7 + $i - 1))}}</div>
+                                <div class="font-bold">{{$getWeekdayInSpanish($getFutureDateInEnglish($weekth * 7 + $i))}}</div>
+                                <div>{{$getDayAndMonthInSpanish($getFutureDateInEnglish($weekth * 7 + $i))}}</div>
                         </div>
                         @endfor
                     </div>
@@ -194,7 +194,7 @@
                 <div
                     style="font-family: KommonExtraBold;"
                     class="text-[32px] font-bold">
-                    Información Detallada
+                    Información (<strong id="selectedClassName">Spinning</strong>)
                 </div>
             </div>
         </div>
@@ -382,21 +382,68 @@
         var fullSeatsCount = <?= $fullSeatsCount ?>;
         var totalprice = <?= $totalprice ?>;
         var seats = <?= @json_encode($seats) ?>;
+        var classFlags = <?= @json_encode($classFlags) ?>;
+        var seatsFromData = <?= @json_encode($seatsFromData) ?>;
+        var classType = <?= $classType ?>;
         var selectedDate = <?= $selectedDate ?>;
         var selectedTime = '<?= $selectedTime ?>';
         var selectedTimeSeats = seats[0];
         var seatsDirection = <?= @json_encode($seatsDirection) ?>;
         var selectedSeatsNum = 0;
+        var currentClassName = 'Spinning';
         $(document).ready(function() {
 
+            //Select Class Types
+            $('#classes').change(function() {
+                currentClassName = $(this).val();
+                classType = classFlags[currentClassName];
+                $('#selectedClassName').text(currentClassName);
+                for (let i = 0; i < 240; i++) {
+                    for (let j = 0; j < 39; j++)
+                        seats[i][j] = 'Empty';
+                }
+                console.log('====================================');
+                console.log(seatsFromData);
+                console.log('====================================');
+                for (let i = 0; i < seatsFromData.length; i++) {
+                    if (seatsFromData[i].gymClassName == currentClassName) {
+                        seats[seatsFromData[i].classIdNum][seatsFromData[i].seatNum] = seatsFromData[i].State;
+                    }
+                }
+                for (let i = 0; i < selectedTimeSeats.length; i++) {
+                    if (selectedTimeSeats[i] == 'Empty')
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/40.png')}}"
+                                alt="logo"
+                                class="seat-Empty ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' }">
+                        `)
+                    else if (selectedTimeSeats[i] == 'Booked') {
+
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/38.png')}}"
+                                alt="logo"
+                                class="seat-Booked ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
+                        `)
+                    } else
+                        $("#seat-" + i).html(`
+                                <img width="50" height="50"
+                                src="{{asset('imgs/icons/39.png')}}"
+                                alt="logo"
+                                class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' }">
+                        `)
+                }
+            });
+            
             // show 30 days in first step with violet buttons
             $("#next-btn").on('click', function(e) {
                 if (weekth < 3) {
                     weekth++;
 
                     $($(".select-day-block")[0]).html(
-                        [1, 2, 3, 4, 5, 6, 7].map((aa) => {
-                            return "<div id='selected-day-" + aa + "' class='selected-day-block cursor-pointer flex flex-col justify-center items-center text-[24px] w-36 min-w-36'><div class='font-bold'>" + getWeekdayInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div><div>" + getDayAndMonthInSpanish(getFutureDateInEnglish(weekth * 7 + aa - 1)) + "</div></div>";
+                        [0, 1, 2, 3, 4, 5, 6].map((aa) => {
+                            return "<div id='selected-day-" + aa + "' class='selected-day-block cursor-pointer flex flex-col justify-center items-center text-[24px] w-36 min-w-36'><div class='font-bold'>" + getWeekdayInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div><div>" + getDayAndMonthInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div></div>";
                         })
                     )
                 }
@@ -406,8 +453,8 @@
                     weekth--;
                     // e.target["id"]
                     $($(".select-day-block")[0]).html(
-                        [1, 2, 3, 4, 5, 6, 7].map((aa) => {
-                            return "<div id='selected-day-" + aa + "' class='selected-day-block cursor-pointer flex flex-col justify-center items-center text-[24px] w-36 min-w-36'><div class='font-bold'>" + getWeekdayInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div><div>" + getDayAndMonthInSpanish(getFutureDateInEnglish(weekth * 7 + aa - 1)) + "</div></div>";
+                        [0, 1, 2, 3, 4, 5, 6].map((aa) => {
+                            return "<div id='selected-day-" + aa + "' class='selected-day-block cursor-pointer flex flex-col justify-center items-center text-[24px] w-36 min-w-36'><div class='font-bold'>" + getWeekdayInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div><div>" + getDayAndMonthInSpanish(getFutureDateInEnglish(weekth * 7 + aa)) + "</div></div>";
                         })
                     )
                 }
@@ -524,10 +571,13 @@
                 $('.selected-day-block').removeClass("border-b-2 border-[#fbee21]");
                 $(e.target).parent(".selected-day-block").addClass("border-b-2 border-[#fbee21]");
                 var selectedNum = e.target.parentElement["id"].split("-")[2];
-                selectedDate = parseInt(weekth) * 7 + parseInt(selectedNum) - 1;
-                $("#selectedDate").text(getFutureDateInSpanish(selectedDate + 1));
+                selectedDate = parseInt(weekth) * 7 + parseInt(selectedNum);
+                console.log('====================================');
+                console.log(selectedDate);
+                console.log('====================================');
+                $("#selectedDate").text(getFutureDateInSpanish(selectedDate));
 
-                selectedSeatsNum = selectedDate * 8 + timeOrder($("#selectedTime").text().trim());
+                selectedSeatsNum = selectedDate * 8 + timeOrder(selectedTime);
                 selectedTimeSeats = seats[selectedSeatsNum];
                 fullSeatsCount = 0;
                 for (let i = 0; i < selectedTimeSeats.length; i++) {
@@ -554,7 +604,6 @@
                                 class="seat-Disable ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' }">
                         `)
                 }
-
             })
             // booking seats with clicking pictures and eliminars 
             $(".seats").on('click', function(e) {
@@ -566,6 +615,7 @@
                     url: "{{route('api.detailed')}}",
                     method: "POST",
                     data: {
+                        currentClassName: currentClassName,
                         selectedSeatsNum: selectedSeatsNum,
                         seatid: seatid,
                     },
@@ -594,7 +644,7 @@
                 $('.step-1').addClass("hidden");
                 $('.step-2').removeClass("hidden");
                 $('.step-2').addClass("flex");
-                if ($("#selectedTime").text().includes('AM') == true) {
+                if (selectedTime.includes('AM') == true) {
                     $('#pm-block').removeClass("flex");
                     $('#pm-block').addClass("hidden");
                     $('#am-block').removeClass("hidden");
