@@ -4,7 +4,6 @@
  */
 export const publicRoutes = [
     '/',
-    '/admin',
     '/api/payment',
     '/planes/just-class',
     '/planes/full-fit',
