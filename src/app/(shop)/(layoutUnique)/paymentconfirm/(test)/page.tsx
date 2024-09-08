@@ -49,7 +49,6 @@ const PaymentStatus = () => {
       };
       document.body.appendChild(script);
     };
-
     const initializePaymentWidgets = () => {
       window.wpwlOptions = {
         maskCvv: true,
@@ -75,10 +74,9 @@ const PaymentStatus = () => {
           // Encontrar el botón de manera segura dentro del formulario
           const button = form.querySelector(".wpwl-button");
           button?.addEventListener("click", async function (e) {
-            console.log("====================================");
-            console.log("clicked");
-            console.log("====================================");
+
             type InfoArray = [
+              string,
               string,
               string,
               string,
@@ -93,21 +91,15 @@ const PaymentStatus = () => {
               "%26"
             ) as InfoArray | undefined;
 
-            if (infos && infos.length >= 7) {
+            if (infos && infos.length >= 8) {
+
               const totalprice = infos[0];
-              const name = `${infos[1]} ${infos[2]}`;
-              const email = infos[3].replaceAll("%40", "@");
+              const name = infos[1] + " " + infos[2];
+              const email = decodeURIComponent(infos[3]);
               const date = decodeURIComponent(infos[4]);
               const classNum = parseInt(infos[5]);
-              const seatsList = infos[6].replaceAll("%2C", ",");
-              console.log("====================================");
-              console.log(totalprice);
-              console.log(name);
-              console.log(email);
-              console.log(date);
-              console.log(classNum);
-              console.log(seatsList);
-              console.log("====================================");
+              const seatsList = decodeURIComponent(infos[6]);
+              const gymClassName = decodeURIComponent(infos[7]);
               const classList = [
                 "7:00 - 8:00 AM",
                 "8:00 - 9:00 AM",
@@ -119,37 +111,64 @@ const PaymentStatus = () => {
                 "8:00 - 9:00 PM",
               ];
               const classnumber = classList[classNum];
-              console.log("====================================");
-              console.log(classnumber);
-              console.log("====================================");
+
+
+              // NO RESPONSE FROM BANK
               try {
                 const response = await fetch(
-                  `${process.env.NEXT_PUBLIC_MAILER_SERVER}/api/user/mailer`,
+                  // `http://192.168.142.43:8000/reservar/deleteBook?date=${date}&classNum=${classNum}&seatsList=${seatsList}&gymClassName=${gymClassName}`,
+                  `${process.env.NEXT_PUBLIC_LARAVEL_Iframe_URL}/reservar/deleteBook?date=${date}&classNum=${classNum}&seatsList=${seatsList}&gymClassName=${gymClassName}`,
                   {
-                    method: "POST",
+                    method: "GET",
                     headers: {
                       "Content-Type": "application/json",
-                      "Access-Control-Allow-Origin": "*",
+                      // "Access-Control-Allow-Origin": "*",
                     },
-                    body: JSON.stringify({
-                      to: email,
-                      date: date,
-                      classNum: classList[classNum],
-                      seatsList: seatsList,
-                      // txt: `Dear ${name},\n\nYour booking for ${date} has been confirmed. Thank you for choosing our service.\n\nBest regards,\nYour Company`,
-                    }),
                   }
                 );
-
                 if (response.ok) {
-                  alert("Email sent successfully!");
+                  alert("Your Book was canceled from bank.");
+                  let result = await response.json();
+                  console.log(result)
                 } else {
-                  throw new Error("Failed to send email");
+                  throw new Error("Failed to cancel book");
                 }
               } catch (error) {
                 console.error("Error:", error);
                 alert("Failed to send email. Please try again.");
               }
+
+              // YES OK RESPONSE FROM BANK
+              // try {
+              //   const response = await fetch(
+              //     `${process.env.NEXT_PUBLIC_MAILER_SERVER}/api/user/mailer`,
+              //     {
+              //       method: "POST",
+              //       headers: {
+              //         "Content-Type": "application/json",
+              //         "Access-Control-Allow-Origin": "*",
+              //       },
+              //       body: JSON.stringify({
+              //         to: email,
+              //         date: date,
+              //         classNum: classList[classNum],
+              //         seatsList: seatsList,
+              //         // txt: `Dear ${name},\n\nYour booking for ${date} has been confirmed. Thank you for choosing our service.\n\nBest regards,\nYour Company`,
+              //       }),
+              //     }
+              //   );
+              //   if (response.ok) {
+              //     alert("Email sent successfully!");
+              //     let result = await response.json();
+              //     console.log(result)
+              //   } else {
+              //     throw new Error("Failed to send email");
+              //   }
+              // } catch (error) {
+              //   console.error("Error:", error);
+              //   alert("Failed to send email. Please try again.");
+              // }
+            
             }
           });
           if (!button) {

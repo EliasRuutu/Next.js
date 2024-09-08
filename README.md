@@ -22,11 +22,12 @@ Proyecto Next.js 14 con Autenticación
 7. npx prisma generate
 8. Crea otra Terminal y Ejecutar ```cd laravel-api```
 9. Ejecutar ```npm install```
-9. Ejecutar ```npm run dev```
-10. Crea otra Terminal y Ejecutar ```php artisan serve --host=localhost --port=8000```
-11. Crea otra Terminal y Ejecutar ```cd mailer```
-12. Ejecutar ```npm install```
-13. Ejecutar ```yarn dev```
+9. Ejecutar ```php artisan migrate```
+10. Ejecutar ```npm run dev```
+11. Crea otra Terminal y Ejecutar ```php artisan serve --host=localhost --port=8000```
+12. Crea otra Terminal y Ejecutar ```cd mailer```
+13. Ejecutar ```npm install```
+14. Ejecutar ```yarn dev```
 
 
 ## Presentación

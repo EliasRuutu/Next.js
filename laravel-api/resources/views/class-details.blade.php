@@ -4,6 +4,7 @@
 <head>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     @csrf
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
@@ -69,26 +70,11 @@
             border: none;
             position: absolute;
         }
-
-        .alert {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 15px;
-            background-color: #f44336;
-            color: white;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-
-        .alert.show {
-            opacity: 1;
-        }
     </style>
 </head>
 
 <body class="bg-white">
+
     <div class=" w-full lg:h-[95vh] overflow-y-hidden flex flex-col lg:flex-row">
         <div class="w-full lg:w-8/12 flex flex-col justify-start items-start pl-12 lg:pl-24 pr-12 lg:pr-0 gap-5 {{ $step == 3 ? 'pt-0' : 'pt-12'}} overflow-y-auto">
             <div class="h-[600px] w-full">
@@ -437,9 +423,6 @@
             </div>
         </div>
     </div>
-    <div id="custom-alert" class="alert">
-        This is a custom alert message.
-    </div>
     <script lanugage="javascript">
         // Link to Home
         $.ajaxSetup({
@@ -447,13 +430,33 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        // var parentUrl = <?= $parentUrl ?>;
-        // const gotoHome = () => {
-        //     console.log('====================================');
-        //     console.log("<?= $parentUrl ?>");
-        //     console.log('====================================');
-        //     // window.parent.location.href = parentUrl;
-        // }
+
+        function showPersistentToast(text, toastType = 'default') {
+            // Store the toast message in localStorage
+            localStorage.setItem('persistentToast', JSON.stringify({
+                text: text,
+                type: toastType
+            }));
+
+            // Use postMessage to communicate with the parent window
+            window.parent.postMessage({
+                type: 'showPersistentToast',
+                text: text,
+                toastType: toastType
+            }, '*'); // Replace '*' with the exact origin of your Next.js app in production
+        }
+
+        function redirectWithPersistentToast(url, text, toastType = 'default') {
+            showPersistentToast(text, toastType);
+            // Use a small timeout to ensure the message is posted before redirecting
+            setTimeout(() => {
+                window.parent.location.href = url;
+            }, 3000);
+        }
+
+
+
+
         const getFutureDateInSpanish = (inputDate) => {
             const date = new Date(inputDate);
             const options = {
@@ -840,6 +843,7 @@
             })
             // select class time block in first step
             $(".time-select-block").on('click', function(e) {
+
                 $(".time-select-block").removeClass("bg-[#c60384] text-white");
                 $(e.target).addClass("bg-[#c60384] text-white");
                 $("#selectedTime").html($(e.target).html());
@@ -1019,7 +1023,7 @@
                                 alt="logo"
                                 class="seat-Full ${ seatsDirection[i] === 'left' ? 'transform scale-x-[-1]' : '' } cursor-pointer ">
                                 `)
-                            } else{
+                            } else {
                                 $("#seat-" + i).html(`
                                 <img width="50" height="50"
                                 src="{{asset('imgs/icons/39.png')}}"
@@ -1452,7 +1456,6 @@
                         }
                     }
 
-
                     $.ajax({
                         url: "{{route('api.sendSeat')}}",
                         method: "POST",
@@ -1469,14 +1472,16 @@
                         success: function(response) {
                             // Handle success
                             console.log(response);
-
                             if (response.success) {
-                                alert(response.success);
-                                window.parent.location.href = '<?= $parentUrl ?>/reservar/tobank/' + totalprice + '&' + nameVal + '&' + lastnameVal + '&' + emailVal + '&' + getFutureDateInSpanish(getFutureDateInEnglish(parseInt(selectedSeatsNum) / 8)) + '&' + parseInt(selectedSeatsNum) % 8 + '&' + bookedSeatsNumsSend.slice(1, bookedSeatsNumsSend.length);
+                                // showToast(response.success)
+                                // redirectWithPersistentToast('<?= $parentUrl ?>/reservar/spinning', response.success, 'error');
+                                window.parent.location.href = '<?= $parentUrl ?>/reservar/tobank/' + totalprice + '&' + nameVal + '&' + lastnameVal + '&' + emailVal + '&' + getFutureDateInSpanish(getFutureDateInEnglish(parseInt(selectedSeatsNum) / 8)) + '&' + parseInt(selectedSeatsNum) % 8 + '&' + bookedSeatsNumsSend.slice(1, bookedSeatsNumsSend.length) + '&' + currentClassName;
+                                
                             };
                             if (response.failed) {
-                                alert(response.failed);
-                                window.parent.location.href = '<?= $parentUrl ?>/reservar/spinning';
+
+                                redirectWithPersistentToast('<?= $parentUrl ?>/reservar/spinning', response.failed, 'error');
+                                // window.parent.location.href = '<?= $parentUrl ?>/reservar/spinning';
                             }
                         },
                         error: function(err) {
