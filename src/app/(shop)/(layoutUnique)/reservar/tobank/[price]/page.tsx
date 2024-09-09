@@ -11,7 +11,7 @@ export default async function Home({ params }: Props) {
   const { price } = params;
   const infos = price.split('%26');
   const totalprice = infos[0];
-  const name = infos[1] + " " + infos[2];
+  const name = decodeURIComponent(infos[1]) + " " + decodeURIComponent(infos[2]);
   const email = decodeURIComponent(infos[3]);
   const date = decodeURIComponent(infos[4]);
   const classNum = parseInt(infos[5]) + 1;
