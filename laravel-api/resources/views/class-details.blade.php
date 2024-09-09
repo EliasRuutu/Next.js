@@ -536,7 +536,7 @@
         }
 
         function isSpanishEnglishAlphabetic(input) {
-            const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+$/;
+            const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
             return regex.test(input);
         }
 

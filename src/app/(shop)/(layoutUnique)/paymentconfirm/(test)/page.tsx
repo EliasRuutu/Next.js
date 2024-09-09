@@ -73,104 +73,7 @@ const PaymentStatus = () => {
 
           // Encontrar el botón de manera segura dentro del formulario
           const button = form.querySelector(".wpwl-button");
-          button?.addEventListener("click", async function (e) {
 
-            type InfoArray = [
-              string,
-              string,
-              string,
-              string,
-              string,
-              string,
-              string,
-              string
-            ];
-
-            // Then, use optional chaining and nullish coalescing
-            const infos: InfoArray | undefined = bookclassinfos?.split(
-              "%26"
-            ) as InfoArray | undefined;
-
-            if (infos && infos.length >= 8) {
-
-              const totalprice = infos[0];
-              const name = infos[1] + " " + infos[2];
-              const email = decodeURIComponent(infos[3]);
-              const date = decodeURIComponent(infos[4]);
-              const classNum = parseInt(infos[5]);
-              const seatsList = decodeURIComponent(infos[6]);
-              const gymClassName = decodeURIComponent(infos[7]);
-              const classList = [
-                "7:00 - 8:00 AM",
-                "8:00 - 9:00 AM",
-                "9:00 - 10:00 AM",
-                "10:00 - 11:00 AM",
-                "5:00 - 6:00 PM",
-                "6:00 - 7:00 PM",
-                "7:00 - 8:00 PM",
-                "8:00 - 9:00 PM",
-              ];
-              const classnumber = classList[classNum];
-
-
-              // NO RESPONSE FROM BANK
-              try {
-                const response = await fetch(
-                  // `http://192.168.142.43:8000/reservar/deleteBook?date=${date}&classNum=${classNum}&seatsList=${seatsList}&gymClassName=${gymClassName}`,
-                  `${process.env.NEXT_PUBLIC_LARAVEL_Iframe_URL}/reservar/deleteBook?date=${date}&classNum=${classNum}&seatsList=${seatsList}&gymClassName=${gymClassName}`,
-                  {
-                    method: "GET",
-                    headers: {
-                      "Content-Type": "application/json",
-                      // "Access-Control-Allow-Origin": "*",
-                    },
-                  }
-                );
-                if (response.ok) {
-                  alert("Your Book was canceled from bank.");
-                  let result = await response.json();
-                  console.log(result)
-                } else {
-                  throw new Error("Failed to cancel book");
-                }
-              } catch (error) {
-                console.error("Error:", error);
-                alert("Failed to send email. Please try again.");
-              }
-
-              // YES OK RESPONSE FROM BANK
-              // try {
-              //   const response = await fetch(
-              //     `${process.env.NEXT_PUBLIC_MAILER_SERVER}/api/user/mailer`,
-              //     {
-              //       method: "POST",
-              //       headers: {
-              //         "Content-Type": "application/json",
-              //         "Access-Control-Allow-Origin": "*",
-              //       },
-              //       body: JSON.stringify({
-              //         to: email,
-              //         date: date,
-              //         classNum: classList[classNum],
-              //         seatsList: seatsList,
-              //         // txt: `Dear ${name},\n\nYour booking for ${date} has been confirmed. Thank you for choosing our service.\n\nBest regards,\nYour Company`,
-              //       }),
-              //     }
-              //   );
-              //   if (response.ok) {
-              //     alert("Email sent successfully!");
-              //     let result = await response.json();
-              //     console.log(result)
-              //   } else {
-              //     throw new Error("Failed to send email");
-              //   }
-              // } catch (error) {
-              //   console.error("Error:", error);
-              //   alert("Failed to send email. Please try again.");
-              // }
-            
-            }
-          });
           if (!button) {
             console.error("Botón no encontrado dentro del formulario.");
             return;
@@ -241,12 +144,28 @@ const PaymentStatus = () => {
     );
   }
 
+  const info = {
+    id: ID ?? null,
+    base64: formulario ?? null,
+    bookclassinfos: bookclassinfos ?? null,
+  };
+
+  // Create a new object with only string values
+  const params: Record<string, string> = Object.fromEntries(
+    Object.entries(info)
+      .filter(([_, value]) => value !== null)
+      .map(([key, value]) => [key, value as string])
+  );
+
+  const queryString = new URLSearchParams(params).toString();
+  console.log(queryString);
+
   return (
     <>
       <section className="bg-white relative">
         <div className="w-full min-h-screen flex flex-col justify-around items-center gap-5 pt-24 content-center">
           <form
-            action={`${process.env.NEXT_PUBLIC_APP_URL}/statusPayment?base64=${formulario}`}
+            action={`${process.env.NEXT_PUBLIC_APP_URL}/statusPayment?${queryString}`}
             className="paymentWidgets wpwl-form-card"
             data-brands="VISA MASTER AMEX"
           ></form>

@@ -25,7 +25,7 @@ export default function Home() {
           className="absolute bottom-[-40%] right-[0vw] lg:right-[8vw] pointer-events-none"
         />
       </div>
-      <div className="w-screen h-[1500px] lg:h-[900px]">
+      <div className="w-screen h-[1500px] lg:h-[1000px]">
         <iframe
           src={`${process.env.NEXT_PUBLIC_LARAVEL_Iframe_URL}/reservar/spinning`}
           className="h-[1500px] lg:h-[100vh]"
